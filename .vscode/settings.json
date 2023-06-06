@@ -67,6 +67,6 @@
     "set": "cpp"
   },
   "code-runner.executorMap": {
-    "cpp": "g++ $dir/$fileName -o  $workspaceRoot/build/$fileNameWithoutExt -Wall -Warray-bounds -Wextra -O2 -std=c++11 && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt"
+    "cpp": "g++ -std=c++17 -O2 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt -Wall && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt"
   }
 }
