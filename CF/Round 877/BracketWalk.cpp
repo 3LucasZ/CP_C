@@ -86,14 +86,14 @@ void solve(){
             if (A[cur]==A[cur+1]) close2.ins(cur);
         }
         if (dbg){
+            cout << "A:" << toString(A) << endl;
             cout << "open2:" <<toString(open2) << endl;
             cout << "close2:" <<toString(close2) << endl;
         }
-        if (N%2==1 || open2.empty() != close2.empty()) {
+        if (N%2==1 || open2.empty() != close2.empty() || A[1]==1 || A[N]==0) {
             cout << "NO" << endl;
-            continue;
         }
-        if (open2.empty() && close2.empty()){
+        else if (open2.empty() && close2.empty()){
             cout << "YES" << endl;
         }
         else if (*--open2.end() < *--close2.end() && *open2.begin() < *close2.begin()) {
