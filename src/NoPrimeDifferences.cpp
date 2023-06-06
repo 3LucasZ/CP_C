@@ -3,7 +3,6 @@
 #include <iterator>
 #include <vector>
 #include <queue> 
-#include <set>
 
 using namespace std;
 
@@ -30,15 +29,36 @@ const int MOD = 1000000007;
 bool multi = true;
 bool dbg = true;
 
+const int MAXN = 1000;
+const int MAXM = 1000;
+int ret[MAXN][MAXM];
+
 void solve(){
+    int N,M; cin >> N >> M;
+    int cur = 1;
+    for (int i=1;i<N;i+=2){
+        for (int j=0;j<M;j++){
+            ret[i][j]=cur;
+            cur++;
+        }
+    }
+    for (int i=0;i<N;i+=2){
+        for (int j=0;j<M;j++){
+            ret[i][j]=cur;
+            cur++;
+        }
+    }
+    for (int i=0;i<N;i++){
+        for (int j=0;j<M;j++){
+            cout << ret[i][j] << " ";
+        }
+        cout << endl;
+    }
 }
 
 int main() {
     int T = 1;
     if (multi) cin >> T;
-    for(int i=0;i<T;i++) {
-        if (dbg) cout << "CASE: " << i+1 << endl;
-        solve();
-    }
+    for(int i=0;i<T;i++) solve();
     return 0;
 }

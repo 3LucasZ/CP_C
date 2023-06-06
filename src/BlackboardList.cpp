@@ -3,7 +3,6 @@
 #include <iterator>
 #include <vector>
 #include <queue> 
-#include <set>
 
 using namespace std;
 
@@ -31,14 +30,24 @@ bool multi = true;
 bool dbg = true;
 
 void solve(){
+    int N; cin >> N;
+    int minT = INT_MAX;
+    int maxT = INT_MIN;
+    for (int i=0;i<N;i++) {
+        int cur; cin >> cur;
+        minT=min(minT,cur);
+        maxT=max(maxT,cur);
+    }
+    if (minT<0){
+        cout << minT << endl;
+    } else {
+        cout << maxT << endl;
+    }
 }
 
 int main() {
     int T = 1;
     if (multi) cin >> T;
-    for(int i=0;i<T;i++) {
-        if (dbg) cout << "CASE: " << i+1 << endl;
-        solve();
-    }
+    for(int i=0;i<T;i++) solve();
     return 0;
 }
