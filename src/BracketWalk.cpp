@@ -4,6 +4,8 @@
 #include <vector>
 #include <queue> 
 #include <set>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -26,14 +28,14 @@ template<class T> using pq = priority_queue<T>;
 #define all(x) x.begin(), x.end()
 #define ins insert
 
-const int MOD = 1000000007;
+//const int MOD = 1000000007;
 bool multi = false;
-bool dbg = true;
+bool dbg = false;
 
 template<typename T, typename V>
-void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ", "; __print(x.second); cerr << '}';}
+string toString(const pair<T, V> &x) {stringstream ret; ret << "{" << x.f << ", " << x.s << '}'; return ret.str();}
 template<typename T>
-void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? ", " : ""), __print(i); cerr << "}";}
+string toString(const T &x) {int f = 0; stringstream ret; ret << "{"; for (auto &i: x) ret << (f++ ? ", " : "") << i; ret << "}"; return ret.str();}
 
 void solve(){
     int N,Q; cin >> N >> Q;
@@ -48,40 +50,53 @@ void solve(){
             A[i]=1;
         }
     }
-    if (dbg){
-        for (int i=0;i<=N+1;i++){
-            cout << A[i] << ", ";
-        }
-        cout << endl;
-    }
     set<int> open2;
     set<int> close2;
     for (int i=1;i<=N;i++){
-        if (A[i]==A[i+1]==0){
-            open2.insert(i);
-        } else if (A[i]==A[i+1]==1){
-            close2.insert(i);
+        if (A[i]==A[i+1] && A[i]==0){
+            open2.ins(i);
+        } else if (A[i]==A[i+1] && A[i]==1){
+            close2.ins(i);
         }
+    }
+    if (dbg){
+        cout << "INIT"  << endl;
+        cout << "A:" << toString(A) << endl;
+        cout << "open2:" <<toString(open2) << endl;
+        cout << "close2:" <<toString(close2) << endl;
+        cout << "EOF" << endl;
     }
 
     //handle q
     for (int i=0;i<Q;i++){
         int cur; cin >> cur;
-        if (A[cur]==A[cur-1]==0) open2.erase(cur-1);
-        if (A[cur]==A[cur+1]==0) open2.erase(cur);
-        if (A[cur]==A[cur-1]==1) close2.erase(cur-1);
-        if (A[cur]==A[cur+1]==1) close2.erase(cur);
+        if (A[cur]==0){
+            if (A[cur]==A[cur-1]) open2.erase(cur-1);
+            if (A[cur]==A[cur+1]) open2.erase(cur);
+        } else {
+            if (A[cur]==A[cur-1]) close2.erase(cur-1);
+            if (A[cur]==A[cur+1]) close2.erase(cur);
+        }
         A[cur]=1-A[cur];
-        if (A[cur]==A[cur-1]==0) open2.insert(cur-1);
-        if (A[cur]==A[cur+1]==0) open2.insert(cur);
-        if (A[cur]==A[cur-1]==1) close2.insert(cur-1);
-        if (A[cur]==A[cur+1]==1) close2.insert(cur);
-        cout << open2 << endl;
-        if (N%2==1 || open2.empty() != open2.empty()) {
+        if (A[cur]==0){
+            if (A[cur]==A[cur-1]) open2.ins(cur-1);
+            if (A[cur]==A[cur+1]) open2.ins(cur);
+        } else {
+            if (A[cur]==A[cur-1]) close2.ins(cur-1);
+            if (A[cur]==A[cur+1]) close2.ins(cur);
+        }
+        if (dbg){
+            cout << "open2:" <<toString(open2) << endl;
+            cout << "close2:" <<toString(close2) << endl;
+        }
+        if (N%2==1 || open2.empty() != close2.empty()) {
             cout << "NO" << endl;
             continue;
         }
-        if (*--open2.end() < *--close2.end() && *open2.begin() < *close2.begin()) {
+        if (open2.empty() && close2.empty()){
+            cout << "YES" << endl;
+        }
+        else if (*--open2.end() < *--close2.end() && *open2.begin() < *close2.begin()) {
             cout << "YES" << endl;
         } else {
             cout << "NO" << endl;
