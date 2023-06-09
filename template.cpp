@@ -14,7 +14,6 @@ typedef pair<int, int> pi;
 typedef pair<ll,ll> pl;
 typedef vector<int> vi;
 typedef vector<ll> vl;
-
 template<class T> using pq = priority_queue<T>;
 
 #define sz(x) (int)(x).size()
