@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <sstream>
 #include <algorithm>
@@ -57,8 +56,36 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
-void solve(){
+struct Edge {
+    int u, v, c;
+};
+
+int N;
+vector<vector<Edge>> graph;
+
+int DFS(int node, int nodeC, int par){
+    int ret=1;
+    for (auto child : graph[node]){
+        if (child.v==par) continue;
+        ret = max(ret,DFS(child.v,child.c, node)+(child.c<nodeC));
+    }
+    return ret;
 }
+
+void solve(){
+    cin >> N;
+    graph.clear();
+    graph.resize(N+1);
+
+    for (int i=0;i<N-1;i++){
+        int u, v; cin >> u >> v;
+        graph[u].pb(Edge{u,v,i});
+        graph[v].pb(Edge{v,u,i});
+    }
+
+    cout << DFS(1,-1,0) << nl;
+}
+
 
 int main() {
     ios::sync_with_stdio(false);

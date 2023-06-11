@@ -1,7 +1,13 @@
 #include <iostream>
 using namespace std;
-
 typedef long long ll;
+
+/*
+INFO:
+Cfg: N/A
+Stress tested: NO
+Site: N/A
+*/
 
 ll gcd(ll a, ll b){
     if (b==0) return a;

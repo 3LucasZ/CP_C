@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <sstream>
 #include <algorithm>
@@ -24,6 +23,7 @@ const char nl = '\n';
 
 template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
 template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
+template <class T> void swap(T& x, T& y) {T t=x; x=y; y=t;}
 
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
@@ -58,6 +58,35 @@ const ll MOD = 1e9+7;
 const bool multi = true;
 
 void solve(){
+    int N; cin >> N;
+    vector<int> A(N); vector<int> B(N);
+    for (int i=0;i<N;i++) cin >> A[i];
+    for (int i=0;i<N;i++) cin >> B[i];
+
+    vector<multiset<int>> ms(N+1);
+    for (int i=0;i<N;i++) {
+        ms[A[i]].insert(B[i]);
+    }
+    
+    ll ans = 0;
+    for (int i=1;i<=N;i++){
+        for (int j=1;j<=2*N/i;j++){
+            if (j>N) continue;
+            int lhs = i*j;
+            multiset<int> u = ms[i]; //less elements -> iter
+            multiset<int> v = ms[j]; //more elements -> group
+            if (sz(v) < sz(u)) swap(u,v);
+            for (auto x : u){
+                ans += v.count(lhs-x);
+            }
+        }
+    }
+
+    //overcounted some stuff lol
+    for (int i=0;i<N;i++){
+        if (A[i]*A[i]==B[i]+B[i]) ans--;
+    }
+    cout << ans/2 << nl;
 }
 
 int main() {

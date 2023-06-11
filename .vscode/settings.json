@@ -64,9 +64,10 @@
     "compare": "cpp",
     "concepts": "cpp",
     "algorithm": "cpp",
-    "set": "cpp"
+    "set": "cpp",
+    "__tree": "cpp"
   },
   "code-runner.executorMap": {
-    "cpp": "g++ -std=c++17 -O2 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt -Wall && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt"
+    "cpp": "g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_ASSERTIONS -DDEBUG -ggdb3 -fsanitize=address,undefined -g -fno-sanitize-recover -ferror-limit=2 -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt"
   }
 }

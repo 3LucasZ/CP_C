@@ -57,17 +57,15 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
-void solve(){
+void gen(){
+    int T = 1; cout << T << nl;
+    int N = 200000; cout << N << nl;
+    for (int i=0;i<N;i++) cout << rand()%1000 << " "; cout << endl;
+    for (int j=0;j<N;j++) cout << rand()%1000 << " "; cout << endl;
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int T = 1;
-    if (multi) cin >> T;
-    for(int i=0;i<T;i++) {
-        dbgM(i+1);
-        solve();
-    }
+    ofstream out("in.txt");
+    gen();
     return 0;
 }

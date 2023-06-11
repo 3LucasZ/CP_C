@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <sstream>
 #include <algorithm>
@@ -58,6 +57,46 @@ const ll MOD = 1e9+7;
 const bool multi = true;
 
 void solve(){
+    int N; cin>>N;
+    vector<int> A(N); for (int i=0;i<N;i++) cin >> A[i];
+    vector<int> B(N); for (int i=0;i<N;i++) cin >> B[i];
+
+    vector<int> Acnt(2*N+1);
+    vector<int> Bcnt(2*N+1);
+    int consec;
+
+    consec=1;
+    for (int i=1;i<N;i++){
+        ckmax(Acnt[A[i-1]],consec);
+        if (A[i]==A[i-1]){
+            consec++;
+        } else {
+            consec=1;
+        }
+        ckmax(Acnt[A[i]],consec);
+    }
+    ckmax(Acnt[A[N-1]],consec);
+    
+    consec = 1;
+    for (int i=1;i<N;i++){
+        ckmax(Bcnt[B[i-1]],consec);
+        if (B[i]==B[i-1]){
+            consec++;
+        } else {
+            consec=1;
+        }
+        ckmax(Bcnt[B[i]],consec);
+    }
+    ckmax(Bcnt[B[N-1]],consec);
+    dbg(Bcnt);
+
+    int mx = 0;
+    for (int i=1;i<=2*N;i++){
+        ckmax(mx,Acnt[i]+Bcnt[i]);
+    }
+    cout << mx << nl;
+   
+    
 }
 
 int main() {

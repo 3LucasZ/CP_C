@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <sstream>
 #include <algorithm>
@@ -48,16 +47,23 @@ template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 #ifdef DEBUG
 #define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
-#define dbgM(x) cout << "CASE: " << x << endl;
+#define case(x) cout << "CASE: " << x << endl;
 #else
 #define dbg(x...)
-#define dbgM(x)
 #endif
 
 const ll MOD = 1e9+7;
 const bool multi = true;
+const bool dbg = false;
 
 void solve(){
+    int N; cin >> N; for (int i=0;i<N;i++) {
+        int tmp;
+        cin  >> tmp;
+        cout << N+1-tmp << " ";
+    }
+    cout << nl;
+
 }
 
 int main() {
@@ -66,7 +72,7 @@ int main() {
     int T = 1;
     if (multi) cin >> T;
     for(int i=0;i<T;i++) {
-        dbgM(i+1);
+        if (dbg) cout << "CASE: " << i+1 << endl;
         solve();
     }
     return 0;

@@ -1,8 +1,13 @@
 #include <iostream>
-
 using namespace std;
-
 typedef long long ll;
+
+/*
+INFO:
+Cfg: MOD, MAXF
+Stress tested: NO
+Site: N/A
+*/
 
 ll MOD = 1e9+7;
 
@@ -14,6 +19,8 @@ ll po(ll a,ll b){
 }
 
 //a choose b
+//M1: chs(N,K) = n!/[k!(n-k)!]
+//M2: chs(N,K) = chs(N,K-1)*(N-K+1)/K
 const int MAXF = 1000;
 ll fact[MAXF+1];
 ll invfact[MAXF+1];
@@ -35,5 +42,7 @@ int main() {
     cout << chs(5,2) << endl;
     cout << chs(5,1) << endl;
     cout << chs(5,0) << endl;
+
+    cout << chs(100, 50) << endl;
     return 0;
 }
