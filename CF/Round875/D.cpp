@@ -66,20 +66,24 @@ void solve(){
     for (int i=0;i<N;i++) cin>>A[i];
     for (int i=0;i<N;i++) cin>>B[i];
     int lim = sqrt(2*N);
-    dbg(N,lim,A,B);
     
     for (int i=0;i<N;i++) if (A[i]<=lim) freq[A[i]][B[i]]++;
         
     //cnt ai = aj
     ll t1 = 0;
     for (int i=0;i<N;i++){
-        int srch = A[i]*A[i]-B[i];
-        if (srch>0 && srch <=N) t1+=freq[A[i]][srch];
+        if (A[i]<=lim){
+            int srch = A[i]*A[i]-B[i];
+            if (srch>=0 && srch <=N) t1+=freq[A[i]][srch];
+        }
     }
     dbg(t1);
     
+    //cnt ai and ai overcount
     for (int i=0;i<N;i++){
-        if (A[i]*A[i]==B[i]+B[i]) t1--;
+        if (A[i]<=lim){
+            if (A[i]*A[i]==B[i]+B[i]) t1--;
+        }
     }
     dbg(t1);
 
@@ -87,7 +91,7 @@ void solve(){
 
     //cnt ai > aj (wlog aj < lim)
     for (int i=0;i<N;i++){
-        for (int j=1;j<=min(A[i]-1,2*N/A[i]);j++){
+        for (int j=1;j<A[i]&&A[i]*j<=2*N;j++){
             if (A[i]*j-B[i]>=0 && A[i]*j-B[i]<=N) t1+=freq[j][A[i]*j-B[i]];
         }
     }

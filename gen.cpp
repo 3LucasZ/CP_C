@@ -56,14 +56,15 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 
 
 void gen(){
+    srand(rand()%1000);
     int T = 1; cout << T << nl;
     int N = 200000; cout << N << nl;
-    for (int i=0;i<N;i++) cout << rand()%1000 << " "; cout << endl;
-    for (int j=0;j<N;j++) cout << rand()%1000 << " "; cout << endl;
+    for (int i=0;i<N;i++) cout << 1+rand()%2 << " "; cout << endl;
+    for (int j=0;j<N;j++) cout << 1+rand()%2 << " "; cout << endl;
 }
 
 int main() {
-    freopen("../in.txt","w",stdout);
+    freopen("in.txt","w",stdout);
     gen();
     return 0;
 }
