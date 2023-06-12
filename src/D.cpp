@@ -1,16 +1,12 @@
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <algorithm>
-#include <iterator>
-#include <vector>
-#include <queue> 
-#include <set>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 typedef long long ll;
-template<class T> using pq = priority_queue<T>;
+typedef vector<int> vi;
+typedef vector<ll> vl;
+typedef pair<int, int> pi;
+typedef pair<ll, ll> pll;
 
 #define sz(x) (int)(x).size()
 #define pb push_back
@@ -23,7 +19,6 @@ const char nl = '\n';
 
 template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
 template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
-template <class T> void swap(T& x, T& y) {T t=x; x=y; y=t;}
 
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
@@ -57,36 +52,52 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
-void solve(){
-    int N; cin >> N;
-    vector<int> A(N); vector<int> B(N);
-    for (int i=0;i<N;i++) cin >> A[i];
-    for (int i=0;i<N;i++) cin >> B[i];
+int N;
+const int MAXN = 200000, LIM = 633;
+int freq[LIM+1][MAXN+1]; 
+vi A, B;
 
-    vector<multiset<int>> ms(N+1);
-    for (int i=0;i<N;i++) {
-        ms[A[i]].insert(B[i]);
-    }
+void solve(){
+    //in
+    cin >> N;
+    A.resize(N);
+    B.resize(N); 
+
+    for (int i=0;i<N;i++) cin>>A[i];
+    for (int i=0;i<N;i++) cin>>B[i];
+    int lim = sqrt(2*N);
+    dbg(N,lim,A,B);
     
-    ll ans = 0;
-    for (int i=1;i<=N;i++){
-        for (int j=1;j<=2*N/i;j++){
-            if (j>N) continue;
-            int lhs = i*j;
-            multiset<int> u = ms[i]; //less elements -> iter
-            multiset<int> v = ms[j]; //more elements -> group
-            if (sz(v) < sz(u)) swap(u,v);
-            for (auto x : u){
-                ans += v.count(lhs-x);
-            }
+    for (int i=0;i<N;i++) if (A[i]<=lim) freq[A[i]][B[i]]++;
+        
+    //cnt ai = aj
+    ll t1 = 0;
+    for (int i=0;i<N;i++){
+        int srch = A[i]*A[i]-B[i];
+        if (srch>0 && srch <=N) t1+=freq[A[i]][srch];
+    }
+    dbg(t1);
+    
+    for (int i=0;i<N;i++){
+        if (A[i]*A[i]==B[i]+B[i]) t1--;
+    }
+    dbg(t1);
+
+    t1/=2;
+
+    //cnt ai > aj (wlog aj < lim)
+    for (int i=0;i<N;i++){
+        for (int j=1;j<=min(A[i]-1,2*N/A[i]);j++){
+            if (A[i]*j-B[i]>=0 && A[i]*j-B[i]<=N) t1+=freq[j][A[i]*j-B[i]];
         }
     }
 
-    //overcounted some stuff lol
+    //clear freq
     for (int i=0;i<N;i++){
-        if (A[i]*A[i]==B[i]+B[i]) ans--;
+        if (A[i]<=lim) freq[A[i]][B[i]]--;
     }
-    cout << ans/2 << nl;
+
+    cout << t1 << nl;
 }
 
 int main() {

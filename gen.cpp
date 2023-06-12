@@ -54,8 +54,6 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-const ll MOD = 1e9+7;
-const bool multi = true;
 
 void gen(){
     int T = 1; cout << T << nl;
@@ -65,7 +63,7 @@ void gen(){
 }
 
 int main() {
-    ofstream out("in.txt");
+    freopen("../in.txt","w",stdout);
     gen();
     return 0;
 }
