@@ -75,20 +75,28 @@ void solve(){
     sort(all(events));
     dbg(events);
     set<int> past;
+    past.insert(N);
+    past.insert(-1);
     for (int ti=0;ti<N;ti++){
         int i = events[ti].s;
-        dbg(i,past);
-
-        if (past.ub(i)!=end(past)) k[i]=*past.ub(i);
-        if (past.lb(i)!=end(past)) y[i]=*past.lb(i);
+        
+        auto kit = --past.lb(i);
+        auto yit = past.lb(i);
+        k[i]=*kit;
+        y[i]=*yit;
         past.insert(i);
     }
 
-    sort(all(events),less<pair<int,int>>());
+    sort(all(events),greater<pair<int,int>>());
+    dbg(events);
     set<int> future;
+    future.insert(N);
+    future.insert(-1);
     for (int ti=0;ti<N;ti++){
         int i = events[ti].s;
-        if (future.ub(k[i])!=end(future)) x[i]=*future.ub(k[i]);
+
+        auto xit = --future.ub(k[i]);
+        x[i]=*xit;
         future.insert(i);
     }
 
@@ -96,7 +104,7 @@ void solve(){
     dbg(k);
     dbg(y);
     for (int i=0;i<N;i++) {
-        ret-=(k[i]-x[i])*(y[i]-i);
+        ret-=(ll)(k[i]-x[i])*(ll)(y[i]-i);
     }
      
     cout << ret << nl;
