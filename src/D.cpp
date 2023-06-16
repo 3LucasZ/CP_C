@@ -64,7 +64,12 @@ void solve(){
             if (vec.empty() || A[j]>vec.back()){
                 vec.pb(A[j]);
             } else {
-                while (sz(vec)>=2 && A[j] < vec[sz(vec)-2]) vec.pop_back();
+                int rep = A[j];
+                while (!vec.empty() && A[j] < vec[sz(vec)-1]) {
+                    rep=max(rep,vec[sz(vec)-1]);
+                    vec.pop_back();
+                }
+                vec.pb(rep);
             }
             ret+=(j-i+1)-sz(vec);
             dbg(i,j,vec);
