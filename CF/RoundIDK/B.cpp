@@ -1,6 +1,24 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
 using namespace std;
+
+typedef long long ll;
+typedef vector<int> vi;
+typedef vector<ll> vl;
+typedef pair<int, int> pi;
+typedef pair<ll, ll> pll;
+
+#define sz(x) (int)(x).size()
+#define pb push_back
+#define f first
+#define s second
+#define lb lower_bound
+#define ub upper_bound
+#define all(x) x.begin(), x.end()
+const char nl = '\n';
+
+template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
+template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
 
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
@@ -31,14 +49,42 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-struct seg {
-    int l;
-    int r;
-};
+const ll MOD = 1e9+7;
+const bool multi = true;
+
+void solve(){
+    int N; cin >> N;
+    char A[N+1]; A[N] = 'Z';
+    for (int i=0;i<N;i++) cin >> A[i];
+    int l=0, r=0, cur=0;
+
+    for (int i=0;i<N;i++){
+        if (A[i]=='<'){
+            cur++;
+            if (A[i]!=A[i+1]){
+                cur=max(cur,r);
+            }
+        } else {
+            cur--;
+            if (A[i]!=A[i+1]){
+                cur=min(cur,l);
+            }
+        }
+        
+        l=min(l,cur);
+        r=max(r,cur);
+    }
+    cout << r-l+1 << nl;
+}
 
 int main() {
-    map<seg,int> map;
-    map[{1,2}]=3;
-    dbg(map);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int T = 1;
+    if (multi) cin >> T;
+    for(int i=0;i<T;i++) {
+        dbgM(i+1);
+        solve();
+    }
     return 0;
 }

@@ -35,10 +35,15 @@ struct seg {
     int l;
     int r;
 };
+bool operator <(const seg &a, const seg &b){
+	return a.l < b.l;
+}
+void __print(seg x) {cerr << "{" << x.l << ", " << x.r << "}";}
 
 int main() {
     map<seg,int> map;
     map[{1,2}]=3;
+    map[{8,23}]=9;
     dbg(map);
     return 0;
 }

@@ -1,6 +1,24 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
 using namespace std;
+
+typedef long long ll;
+typedef vector<int> vi;
+typedef vector<ll> vl;
+typedef pair<int, int> pi;
+typedef pair<ll, ll> pll;
+
+#define sz(x) (int)(x).size()
+#define pb push_back
+#define f first
+#define s second
+#define lb lower_bound
+#define ub upper_bound
+#define all(x) x.begin(), x.end()
+const char nl = '\n';
+
+template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
+template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
 
 void __print(int x) {cerr << x;}
 void __print(long x) {cerr << x;}
@@ -31,14 +49,39 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-struct seg {
-    int l;
-    int r;
-};
+const ll MOD = 1e9+7;
+const bool multi = true;
+
+void solve(){
+    int N; cin >> N;
+    vi A(N); for (int i=0;i<N;i++) cin >> A[i];
+    dbg(N,A);
+
+    ll ret = 0;
+    for (int i=0;i<N;i++){
+        vi vec;
+        for (int j=i;j<N;j++){
+            if (vec.empty() || A[j]>vec.back()){
+                vec.pb(A[j]);
+            } else {
+                while (sz(vec)>=2 && A[j] < vec[sz(vec)-2]) vec.pop_back();
+            }
+            ret+=(j-i+1)-sz(vec);
+            dbg(i,j,vec);
+        }
+    }
+
+    cout << ret << endl;
+}
 
 int main() {
-    map<seg,int> map;
-    map[{1,2}]=3;
-    dbg(map);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int T = 1;
+    if (multi) cin >> T;
+    for(int i=0;i<T;i++) {
+        dbgM(i+1);
+        solve();
+    }
     return 0;
 }
