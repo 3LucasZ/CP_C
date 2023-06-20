@@ -57,7 +57,8 @@ struct Event {
     int x;
     bool open;
 };
-void __print(const Event &x) {cerr << "{ id:"; __print(x.id); cerr << ", x:"; __print(x.x); cerr << ", open:"; __print(x.open); cerr << '}';}
+void __print(const Event &x) {cerr << "{ id:"; __print(x.id); cerr << ", x:"; __print(x.x); cerr << ", o:"; __print(x.open); cerr << '}';}
+
 void solve(){
     int N, M; cin >> N >> M;
     vector<Event> eventsById;
@@ -73,20 +74,83 @@ void solve(){
         eventsByOr.pb(r);
     }
     dbg(N,M);
-    dbg(eventsById);
+    dbg(eventsByOr);
     sort(all(eventsByOr),[](Event a, Event b){
         if (a.x == b.x){
-            if (a.open == b.open){
-                return a.id-b.id;
-            }
-            else {
-                return a.open - b.open;
-            }
-        } else {
-            return a.x-b.x;
+            return a.open;
         }
+        return a.x < b.x;
     });
     dbg(eventsByOr);
+
+    int ans = 0;
+    //P1
+    int maxE = 0;
+    int minE = 2*M;
+    vi lens;
+    for (int i=0;i<N;i++){
+        int len = eventsById[2*i+1].x-eventsById[2*i].x+1;
+        lens.pb(len);
+        maxE = max(maxE,len);
+        minE = min(minE,len);
+    }
+    dbg(lens);
+    ans=max(ans,maxE-minE);
+
+    //P2
+    vi L(2*N);
+    vi R(2*N);
+    for (int i=0;i<=2*N-1;i++){
+        if (i!=0) L[i]=L[i-1];
+        if (!eventsByOr[i].open){
+            ckmax(L[i],lens[eventsByOr[i].id]);
+        }
+    } 
+    for (int i=2*N-1;i>=0;i--){
+        if (i!=2*N-1) R[i]=R[i+1];
+        if (eventsByOr[i].open){
+            ckmax(R[i],lens[eventsByOr[i].id]);
+        }
+    } 
+    dbg(L);
+    dbg(R);
+    for (int i=0;i<2*N-1;i++){
+        // Event cur = eventsByOr[i];
+        // if (cur.open && i > 0 && L[i-1]>0){
+        //     ans=max(ans,lens[cur.id]);
+        // }
+        // if (!cur.open && i<2*N-1 && R[i+1]>0){
+        //     ans=max(ans,lens[cur.id]);
+        // }
+        if (L[i]!=0 && R[i+1]!=0) ans=max(ans,max(L[i],R[i+1]));
+    }
+
+    //P3
+    for (int rr=0;rr<2;rr++){
+    multiset<int> lefts;
+    multiset<int> rights;
+
+    for (int i=0;i<2*N;i++){
+        Event cur = eventsByOr[i];
+        int id = cur.id;
+        Event l = eventsById[2*id];
+        Event r = eventsById[2*id+1];
+        dbg(lefts);
+        dbg(rights);
+        if (cur.open){
+            lefts.insert(l.x);
+            rights.insert(r.x);
+            ans=max(ans,l.x - *lefts.begin());
+            ans=max(ans,r.x - *rights.begin());
+        } else {
+            lefts.erase(lefts.find(l.x));
+            rights.erase(rights.find(r.x));
+        }
+        dbg("YEY");
+    } //reverse(all(eventsByOr));
+    }
+
+     cout << 2*ans << nl;
 }
 
 int main() {
