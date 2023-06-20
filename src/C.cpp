@@ -53,55 +53,47 @@ const ll MOD = 1e9+7;
 const bool multi = true;
 
 void solve(){
-    int N; cin >> N;
-    vector<char> S(N);
-    vector<char> T(N);
-    for (int i=0;i<N;i++) cin >> S[i];
-    for (int i=0;i<N;i++) cin >> T[i];
-    dbg(S,T);
-    int ans = 1000* N;
-
-    //Case 1
-    int dif1 = 0;
+    int N, M;
+    cin >> N >> M;
+    int leftT = 0;
+    int rightT = 0;
+    vi left(M+2);
+    vector<bool> place(M+2);
+    vi right(M+2);
+    dbg(N,M);
     for (int i=0;i<N;i++){
-        if (S[i]!=T[i]) dif1++;
+        int x; cin >> x;
+        if (x==-1) leftT++;
+        else if (x==-2) rightT++;
+        else {
+            left[x]=1;
+            right[x]=1;
+            place[x]=true;
+        }
     }
-    ans=min(ans,2*dif1+(dif1%2==1?-1:0));
-    if (dif1==0 || dif1==1) {
-        cout << dif1 << nl;
+
+    //SAFETY CASE
+    if (leftT+rightT == N){
+        cout << max(M,max(leftT,rightT)) << nl;
         return;
     }
-    dbg(dif1);
-
-    //Case 2
-    int dif2 = 0;
-    reverse(all(S));
-    for (int i=0;i<N;i++){
-        if (S[i]!=T[i]) dif2++;
+    //REGULAR CASE
+    dbg(leftT,rightT);
+    dbg(left);
+    for (int i=1;i<=M;i++){
+        left[i+1]+=left[i];
+        left[i]=min(left[i]+leftT,i);
     }
-    if (dif2==0){
-        cout << 2 << nl;
-        return;
+    for (int i=M;i>=1;i--){
+        right[i-1]+=right[i];
+        right[i]=min(right[i]+rightT,M-i+1);
     }
-    ans=min(ans,2*dif2+(dif2%2==0?-1:0));
-    dbg(dif2);
-    
-
-    //Case 3
-    bool palyS = true;
-    for (int i=0;i<N;i++){
-        if (S[i]!=S[N-1-i]) palyS=false;
+    int ans = 0;
+    for (int i=1;i<=M;i++){
+        if (place[i] || i==0 || i==M+1) ans=max(ans,(i-1>=0?left[i-1]:0)+(i+1<=N?right[i+1]:0)+place[i]);
     }
-    bool palyT = true;
-    for (int i=0;i<N;i++){
-        if (T[i]!=T[N-1-i]) palyT=false;
-    }
-    bool paly = palyS || palyT;
-    dbg(paly);
-    if (paly){
-        ans=min(ans,min(2*dif1,2*dif2)-1);
-    }
-
+    dbg(left);
+    dbg(right);
     cout << ans << nl;
 }
 

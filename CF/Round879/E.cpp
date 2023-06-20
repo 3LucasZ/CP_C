@@ -52,49 +52,38 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
+ll gcd(ll a, ll b){
+    if (b==0) return a;
+    return gcd(b,a%b);
+}
+
 void solve(){
-    int N, M;
-    cin >> N >> M;
-    int leftT = 0;
-    int rightT = 0;
-    vi left(M+2);
-    vector<bool> place(M+2);
-    vi right(M+2);
-    dbg(N,M);
+    ll N; cin >> N;
+    vector<ll> A(N);
+    for (int i=0;i<N;i++) cin >> A[i];
+
+    unordered_set<ll> mex;
+    unordered_set<ll> lcms;
     for (int i=0;i<N;i++){
-        int x; cin >> x;
-        if (x==-1) leftT++;
-        else if (x==-2) rightT++;
-        else {
-            left[x]=1;
-            right[x]=1;
-            place[x]=true;
+        unordered_set<ll> tmp;
+        tmp.insert(A[i]);
+        mex.insert(A[i]);
+        for (auto lcm : lcms){
+            ll new_lcm = lcm*A[i]/gcd(lcm,A[i]);
+            if (new_lcm > 2*N*N) continue;
+            tmp.insert(new_lcm);
+            mex.insert(new_lcm);
         }
+        lcms = tmp;
     }
 
-    //SAFETY CASE
-    if (leftT+rightT == N){
-        cout << max(M,max(leftT,rightT)) << nl;
-        return;
+    for (int i=1;i<=sz(mex);i++){
+        if (mex.count(i)==0){
+            cout << i << nl;
+            return;
+        }
     }
-    //REGULAR CASE
-    dbg(leftT,rightT);
-    dbg(left);
-    for (int i=1;i<=M;i++){
-        left[i+1]+=left[i];
-        left[i]=min(left[i]+leftT,i);
-    }
-    for (int i=M;i>=1;i--){
-        right[i-1]+=right[i];
-        right[i]=min(right[i]+rightT,M-i+1);
-    }
-    int ans = 0;
-    for (int i=1;i<=M;i++){
-        if (place[i] || i==0 || i==M+1) ans=max(ans,(i-1>=0?left[i-1]:0)+(i+1<=N?right[i+1]:0)+place[i]);
-    }
-    dbg(left);
-    dbg(right);
-    cout << ans << nl;
+    cout << sz(mex)+1 << nl;
 }
 
 int main() {

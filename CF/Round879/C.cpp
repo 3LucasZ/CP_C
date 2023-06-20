@@ -52,37 +52,57 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
-ll gcd(ll a, ll b){
-    if (b==0) return a;
-    return gcd(b,a%b);
-}
-
 void solve(){
-    ll N; cin >> N;
-    vector<ll> A(N);
-    for (int i=0;i<N;i++) cin >> A[i];
+    int N; cin >> N;
+    vector<char> S(N);
+    vector<char> T(N);
+    for (int i=0;i<N;i++) cin >> S[i];
+    for (int i=0;i<N;i++) cin >> T[i];
+    dbg(S,T);
+    int ans = 1000* N;
 
-    unordered_set<ll> mex;
-    unordered_set<ll> lcms;
+    //Case 1
+    int dif1 = 0;
     for (int i=0;i<N;i++){
-        unordered_set<ll> tmp;
-        tmp.insert(A[i]);
-        mex.insert(A[i]);
-        for (auto lcm : lcms){
-            ll new_lcm = lcm*A[i]/gcd(lcm,A[i]);
-            if (new_lcm > 2*N*N) continue;
-            tmp.insert(new_lcm);
-            mex.insert(new_lcm);
-        }
-        lcms = tmp;
+        if (S[i]!=T[i]) dif1++;
+    }
+    ans=min(ans,2*dif1+(dif1%2==1?-1:0));
+    if (dif1==0 || dif1==1) {
+        cout << dif1 << nl;
+        return;
+    }
+    dbg(dif1);
+
+    //Case 2
+    int dif2 = 0;
+    reverse(all(S));
+    for (int i=0;i<N;i++){
+        if (S[i]!=T[i]) dif2++;
+    }
+    if (dif2==0){
+        cout << 2 << nl;
+        return;
+    }
+    ans=min(ans,2*dif2+(dif2%2==0?-1:0));
+    dbg(dif2);
+    
+
+    //Case 3
+    bool palyS = true;
+    for (int i=0;i<N;i++){
+        if (S[i]!=S[N-1-i]) palyS=false;
+    }
+    bool palyT = true;
+    for (int i=0;i<N;i++){
+        if (T[i]!=T[N-1-i]) palyT=false;
+    }
+    bool paly = palyS || palyT;
+    dbg(paly);
+    if (paly){
+        ans=min(ans,min(2*dif1,2*dif2)-1);
     }
 
-    for (int i=1;i<=sz(mex);i++){
-        if (mex.count(i)==0){
-            cout << i << nl;
-            return;
-        }
-    }
+    cout << ans << nl;
 }
 
 int main() {
