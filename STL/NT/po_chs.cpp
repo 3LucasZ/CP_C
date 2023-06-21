@@ -30,6 +30,7 @@ void setupChs() {
     for (int i=MAXF;i>=1;i--) invfact[i-1]=invfact[i]*i%MOD;
 }
 ll chs(int n, int k) {
+    if (n < 0 || k < 0 || k > n) return 0;
     return fact[n]*invfact[k]%MOD*invfact[n-k]%MOD;
 }
 
@@ -44,5 +45,8 @@ int main() {
     cout << chs(5,0) << endl;
 
     cout << chs(100, 50) << endl;
+    cout << chs(0,0) << endl;
+    cout << chs(0,-1) << endl;
+    cout << chs (100,500) << endl;
     return 0;
 }

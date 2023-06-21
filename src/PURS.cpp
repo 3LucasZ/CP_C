@@ -49,20 +49,42 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-const ll MOD = 1e9+7;
-const bool multi = true;
+class PURS {
+    public:
+        int sz;
+        vector<ll> tree;
+        PURS(int n){
+            sz = 1; while (sz < n) sz *= 2;
+            tree.resize(2*sz+1);
+        }
+        ll get(int k){
+            long ret = 0;
+            for (k+=sz-1;k>=1;k/=2) ret+=tree[k];
+            return ret;
+        }
+        void add(int a, int b, int x) {
+            a+=sz-1;
+            b+=sz-1;
+            while (a<=b){
+                if (a%2==1) tree[a++]+=x;
+                if (b%2==0) tree[b--]+=x;
+                a/=2;
+                b/=2;
+            }
+        }
+};
+void __print(PURS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.get(i)); __print(v);}
 
-void solve(){
-}
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int T = 1;
-    if (multi) cin >> T;
-    for(int i=0;i<T;i++) {
-        dbgM(i+1);
-        solve();
-    }
+    PURS P = PURS(8);
+    P.add(1,5,3);
+    P.add(5,8,2);
+    dbg(P);
+
+    vector<PURS> V;
+    V.push_back(PURS(1));
+    V.push_back(PURS(1));
+    dbg(V);
     return 0;
 }

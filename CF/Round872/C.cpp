@@ -55,17 +55,19 @@ const bool multi = true;
 void solve(){
     int N, M;
     cin >> N >> M;
-    int leftT = 0;
-    int rightT = 0;
+    int Ls = 0;
+    int Rs = 0;
+    int As = 0;
     vi left(M+2);
     vector<bool> place(M+2);
     vi right(M+2);
     dbg(N,M);
     for (int i=0;i<N;i++){
         int x; cin >> x;
-        if (x==-1) leftT++;
-        else if (x==-2) rightT++;
+        if (x==-1) Ls++;
+        else if (x==-2) Rs++;
         else {
+            if (left[x]==0) As++;
             left[x]=1;
             right[x]=1;
             place[x]=true;
@@ -73,24 +75,26 @@ void solve(){
     }
 
     //SAFETY CASE
-    if (leftT+rightT == N){
-        cout << max(M,max(leftT,rightT)) << nl;
+    int ans = min(M,max(Ls,Rs)+As);
+    if (Ls+Rs == N){
+        cout << ans << nl;
         return;
     }
+
     //REGULAR CASE
-    dbg(leftT,rightT);
+    dbg(Ls,Rs);
     dbg(left);
     for (int i=1;i<=M;i++){
         left[i+1]+=left[i];
-        left[i]=min(left[i]+leftT,i);
+        left[i]=min(left[i]+Ls,i);
     }
     for (int i=M;i>=1;i--){
         right[i-1]+=right[i];
-        right[i]=min(right[i]+rightT,M-i+1);
+        right[i]=min(right[i]+Rs,M-i+1);
     }
-    int ans = 0;
+
     for (int i=1;i<=M;i++){
-        if (place[i] || i==0 || i==M+1) ans=max(ans,(i-1>=0?left[i-1]:0)+(i+1<=N?right[i+1]:0)+place[i]);
+        if (place[i]) ans=max(ans,left[i-1]+right[i+1]+1);
     }
     dbg(left);
     dbg(right);
