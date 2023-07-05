@@ -52,19 +52,45 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
-
-
-
-
-
-
-
-
-
-
-
-
 void solve(){
+    int N; cin >> N;
+    vector<int> A (N); for (int i=0;i<N;i++) cin >> A[i];
+    vector<int> B (N); for (int i=0;i<N;i++) cin >> B[i];
+
+    int L = N;
+    int R = -1;
+    for (int i=0;i<N;i++){
+        if (A[i]!=B[i]){
+            L = min(L,i);
+            R = max(R,i);
+        }
+    }
+    int smin=B[L];
+    int smax=B[R];
+    
+    dbg(N);
+    dbg(A);
+    dbg(B);
+    dbg(L,R);
+    dbg(smin,smax);
+
+    while (L>=0) {
+        if (B[L] <= smin) {
+            ckmin(smin,B[L]);
+            L--;
+        }
+        else break;
+    }
+
+    while (R<N) {
+        if (B[R] >= smax) {
+            ckmax(smax,B[R]);
+            R++;
+        }
+        else break;
+    }
+
+    cout << L+1+1 << " " << R-1+1 << nl;
 }
 
 int main() {

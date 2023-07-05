@@ -52,19 +52,34 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
-
-
-
-
-
-
-
-
-
-
-
-
 void solve(){
+    string db; cin >> db;
+    int n; cin >> n;
+    string L; cin >> L;
+    string R; cin >> R;
+
+    int x = 0;
+    for (int i=0;i<n;i++){
+        if (L[i]==R[i]){
+            x=i+1;
+        } else {
+            break;
+        }
+    }
+    dbg(L,R,x);
+    
+    bool ans = false;
+    int matched;
+    
+    matched = 0;
+    for (int i=0;i<sz(db);i++){
+        if (matched >= x && L[matched]>db[i] && ){
+
+        }
+        if (L[matched]==db[i]){
+            matched++;
+        }
+    }
 }
 
 int main() {

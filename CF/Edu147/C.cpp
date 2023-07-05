@@ -52,19 +52,45 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
-
-
-
-
-
-
-
-
-
-
-
-
 void solve(){
+    string s; cin >> s;
+    int N = sz(s);
+
+    int cnt = 0; for (int i=0;i<N;i++) if (s[i]==s[0]) cnt++;
+    if (N==1 || cnt==N) {
+        cout << 0 << nl;
+        return; 
+    }
+
+    vector<int> pos[26];
+    for (int i=0;i<26;i++){
+        pos[i].push_back(-1);
+    }
+    for (int i=0;i<N;i++){
+        pos[s[i]-'a'].push_back(i);
+    }
+    for (int i=0;i<26;i++){
+        pos[i].push_back(N);
+    }
+    
+    int min_max_seg = N;
+    for (int i=0;i<26;i++){
+        int max_seg = 0;
+        for (int j=1;j<sz(pos[i]);j++){
+            max_seg=max(max_seg, pos[i][j]-pos[i][j-1]-1);
+        }
+        min_max_seg=min(min_max_seg,max_seg);
+    }
+    dbg(min_max_seg);
+
+    int ans = 0;
+    while (min_max_seg > 0){
+        min_max_seg/=2;
+        ans++;
+    }
+
+    cout << ans << nl;
+
 }
 
 int main() {

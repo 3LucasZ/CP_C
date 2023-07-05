@@ -52,19 +52,33 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
-
-
-
-
-
-
-
-
-
-
-
-
 void solve(){
+    int n,k,x;
+    cin >> n >> k >> x;
+
+    if (x==1){
+        if (k==1 || k==2 && n%2==1) {
+            cout << "NO" << endl;
+            return;
+        }
+        cout << "YES" << endl;
+        cout << n/2 << endl;
+        if (n%2!=0){
+            n-=3;
+            cout << "3 ";
+        }
+        while (n>0){
+            n-=2;
+            cout << "2 ";
+        }
+    }
+    
+    else {
+        cout << "YES" << endl;
+        cout << n << endl;
+        for (int i=0;i<n;i++) cout << "1 ";
+    }
+    cout << endl;
 }
 
 int main() {

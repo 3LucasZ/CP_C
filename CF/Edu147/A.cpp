@@ -52,19 +52,17 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 const ll MOD = 1e9+7;
 const bool multi = true;
 
-
-
-
-
-
-
-
-
-
-
-
-
 void solve(){
+    string s; cin >> s;
+    int ret = 1;
+    for (int i=0;i<sz(s);i++){
+        if (s[0]=='0') ret=0;
+        else if (s[i]=='?') {
+            if (i==0) ret*=9;
+            else ret*=10;
+        }
+    }
+    cout << ret << endl;
 }
 
 int main() {
@@ -77,4 +75,4 @@ int main() {
         solve();
     }
     return 0;
-}
+} 
