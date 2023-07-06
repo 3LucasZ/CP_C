@@ -50,36 +50,45 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = true;
+const bool multi = false;
+
+
+
+
+
+
+
+
+
+
+struct Frac {
+    ll i,n,d;
+};
+
+
 
 void solve(){
-    string db; cin >> db;
-    int n; cin >> n;
-    string L; cin >> L;
-    string R; cin >> R;
-
-    int x = 0;
-    for (int i=0;i<n;i++){
-        if (L[i]==R[i]){
-            x=i+1;
-        } else {
-            break;
-        }
+    int N; cin >> N;
+    vector<Frac> A(N);
+    for (int i=0;i<N;i++){
+        A[i].i=i+1;
+        cin >> A[i].n >> A[i].d;
+        A[i].d+=A[i].n;
     }
-    dbg(L,R,x);
-    
-    bool ans = false;
-    int matched;
-    
-    matched = 0;
-    for (int i=0;i<sz(db);i++){
-        if (matched >= x && L[matched]>db[i] && ){
+    dbg(N);
 
+    sort(all(A),[](Frac a, Frac b){
+        ll fracDif = a.n*b.d - a.d*b.n;
+        if (fracDif==0){
+            return a.i-b.i < 0;
         }
-        if (L[matched]==db[i]){
-            matched++;
-        }
+        return fracDif > 0;
+    });
+
+    for (int i=0;i<N;i++){
+        cout << A[i].i << " ";
     }
+    cout << nl;
 }
 
 int main() {

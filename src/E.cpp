@@ -61,31 +61,74 @@ const bool multi = false;
 
 
 
+int N;
+vector<int> A;
+vector<char> S;
 
+ll fix(int m, int e, int x){
+    dbg(m,e,x);
+    int mex = 0;
+    unordered_set<int> set;
+    set.insert(m);
+    set.insert(e);
+    set.insert(x);
+    if (!set.count(0)) mex=0;
+    else if (!set.count(1)) mex=1;
+    else if (!set.count(2)) mex=2;
+    else if (!set.count(3)) mex=3;
+    dbg(mex);
 
+    vector<int> ok('Z');
+    ok['M']=m;
+    ok['E']=e;
+    ok['X']=x;
+    dbg(ok);
 
-void solve(){
-    int N = 8;
-    int last;
+    vector<char> S2;
     for (int i=0;i<N;i++){
-        int x; cin >> x;
-        if (i>0){
-            if (x<last) {
-                cout << "No" << nl;
-                return;
+        if (A[i]==ok[S[i]]){
+            S2.push_back(S[i]);
+        }
+    }
+    int M = sz(S2);
+    dbg(M,S2);
+
+    vector<ll> preM(M);
+    for (int i=0;i<M;i++){
+        if (i>0) preM[i]=preM[i-1];
+        if (S2[i]=='M') preM[i]++;
+    }
+    vector<ll> sufX(M);
+    for (int i=M-1;i>=0;i--){
+        if (i<M-1) sufX[i]=sufX[i+1];
+        if (S2[i]=='X') sufX[i]++;
+    }
+
+    ll ret = 0;
+    for (int i=1;i<=M-2;i++){
+        if (S2[i]=='E') ret+=preM[i-1]*sufX[i+1]*mex;
+    }
+    dbg(ret);
+    return ret;
+}
+void solve(){
+    cin >> N;
+    A = vector<int>(N);
+    S = vector<char>(N);
+    for (int i=0;i<N;i++) cin >> A[i];
+    for (int i=0;i<N;i++) cin >> S[i];
+    dbg(N,A,S);
+
+    ll ans = 0;
+    for (int m=0;m<=2;m++){
+        for (int e=0;e<=2;e++){
+            for (int x=0;x<=2;x++){
+                ans+=fix(m,e,x);
             }
         }
-        if (x%25!=0){
-            cout << "No" << nl;
-            return;
-        }
-        if (x<100 || x>675){
-            cout << "No" << nl;
-            return;
-        }
-        last=x;
     }
-    cout << "Yes" << nl;
+
+    cout << ans << nl;
 }
 
 int main() {

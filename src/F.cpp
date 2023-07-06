@@ -65,27 +65,37 @@ const bool multi = false;
 
 
 void solve(){
-    int N = 8;
-    int last;
+    int N,M;
+    cin >> N >> M;
+    vector<int> P(N);
+    for (int i=0;i<N;i++) cin >> P[i];
+    vector<pair<int,int>> C(M); //coupon[Lowerboundi,Discounti]
+    for (int i=0;i<M;i++) cin >> C[i].first;
+    for (int i=0;i<M;i++) cin >> C[i].second;
+
+    sort(all(P),less<int>());
+    dbg(P);
+    
+    sort(all(C),[](pair<int,int> a, pair<int,int> b){
+        return a.first>b.first;
+    });
+    dbg(C);
+
+    priority_queue<int> activeDiscounts;
+    ll ans = 0;
     for (int i=0;i<N;i++){
-        int x; cin >> x;
-        if (i>0){
-            if (x<last) {
-                cout << "No" << nl;
-                return;
-            }
+        ans+=P[i];
+        while (!C.empty() && C.back().first<=P[i]) {
+            activeDiscounts.push(C.back().second);
+            C.pop_back();
         }
-        if (x%25!=0){
-            cout << "No" << nl;
-            return;
+        if (!activeDiscounts.empty()){
+            ans-=activeDiscounts.top();
+            activeDiscounts.pop();
         }
-        if (x<100 || x>675){
-            cout << "No" << nl;
-            return;
-        }
-        last=x;
     }
-    cout << "Yes" << nl;
+
+    cout << ans << nl;
 }
 
 int main() {

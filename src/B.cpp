@@ -50,17 +50,45 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = true;
+const bool multi = false;
 
-int dist(pair<int,int> a, pair<int,int> b){
-    return abs(a.first-b.first) + abs(a.second-b.second);
-}
+
+
+
+
+
+
+
+
+
+
+
 
 void solve(){
-    pair<int, int> A, B, C;
-    cin >> A.first >> A.second >> B.first >> B.second >> C.first >> C.second;
+    int N, M; 
+    cin >> N >> M;
+    vector<string> C(N);
+    for (int i=0;i<N;i++) cin >> C[i];
+    vector<string> D(M+1);
+    D[0]="";
+    for (int i=1;i<=M;i++) cin >> D[i];
+    vector<int> P(M+1);
+    for (int i=0;i<=M;i++) cin >> P[i];
+    dbg(N,M); 
+    dbg(C);
+    dbg(D);
+    dbg(P);
 
-    cout << (dist(A,B)+dist(A,C)-dist(B,C))/2+1 << endl;
+    int ans = 0;
+    for (int i=0;i<N;i++){
+        auto it = find(all(D),C[i]);
+        int id = 0;
+        if (it!=D.end()){
+            id=it-D.begin();
+        }
+        ans += P[id];
+    }
+    cout << ans << nl;
 }
 
 int main() {

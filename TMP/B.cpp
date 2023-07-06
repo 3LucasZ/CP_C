@@ -50,42 +50,17 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = false;
+const bool multi = true;
 
-
-
-
-
-
-
-
-
-
-
-
+int dist(pair<int,int> a, pair<int,int> b){
+    return abs(a.first-b.first) + abs(a.second-b.second);
+}
 
 void solve(){
-    int N = 8;
-    int last;
-    for (int i=0;i<N;i++){
-        int x; cin >> x;
-        if (i>0){
-            if (x<last) {
-                cout << "No" << nl;
-                return;
-            }
-        }
-        if (x%25!=0){
-            cout << "No" << nl;
-            return;
-        }
-        if (x<100 || x>675){
-            cout << "No" << nl;
-            return;
-        }
-        last=x;
-    }
-    cout << "Yes" << nl;
+    pair<int, int> A, B, C;
+    cin >> A.first >> A.second >> B.first >> B.second >> C.first >> C.second;
+
+    cout << (dist(A,B)+dist(A,C)-dist(B,C))/2+1 << endl;
 }
 
 int main() {

@@ -50,7 +50,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = false;
+const bool multi = true;
 
 
 
@@ -65,27 +65,6 @@ const bool multi = false;
 
 
 void solve(){
-    int N = 8;
-    int last;
-    for (int i=0;i<N;i++){
-        int x; cin >> x;
-        if (i>0){
-            if (x<last) {
-                cout << "No" << nl;
-                return;
-            }
-        }
-        if (x%25!=0){
-            cout << "No" << nl;
-            return;
-        }
-        if (x<100 || x>675){
-            cout << "No" << nl;
-            return;
-        }
-        last=x;
-    }
-    cout << "Yes" << nl;
 }
 
 int main() {

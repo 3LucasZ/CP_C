@@ -50,7 +50,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = false;
+const bool multi = true;
 
 
 
@@ -60,32 +60,59 @@ const bool multi = false;
 
 
 
+/*
+union and get operations
+csz[x] is the size of the component with head x
+par[x] is the parent of x. if par[x]=-1 then x is a head.
+Tested: NO
+*/
+class DSU {
+    public:
+        int sz;
+        vector<int> par;
+        vector<int> csz;
 
+        DSU(int sz){
+            this->sz=sz;
+            par = vector<int>(sz+1,-1);
+            csz = vector<int>(sz+1,1);
+        }
 
+        int getPar(int v){
+            if (par[v] == -1) {
+                return v;
+            }
+            par[v] = getPar(par[v]);
+            return par[v];
+        }
 
+        void join(int u, int v){
+            int U = getPar(u);
+            int V = getPar(v);
+            //same c, do nothing
+            if (U == V) return;
+            //force csz[V]<csz[U]
+            if (csz[U]<csz[V])swap(U,V);
+            //op
+            par[V] = U;
+            csz[U] += csz[V];
+        }
+        //chex CC
+        bool connected(int u, int v){
+            return getPar(u)==getPar(v);
+        }
+    };
+void __print(DSU x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.getPar(i)); __print(v);}
 
 void solve(){
-    int N = 8;
-    int last;
-    for (int i=0;i<N;i++){
-        int x; cin >> x;
-        if (i>0){
-            if (x<last) {
-                cout << "No" << nl;
-                return;
-            }
-        }
-        if (x%25!=0){
-            cout << "No" << nl;
-            return;
-        }
-        if (x<100 || x>675){
-            cout << "No" << nl;
-            return;
-        }
-        last=x;
-    }
-    cout << "Yes" << nl;
+    DSU dsu = DSU(10);
+    dsu.join(1,2);
+    dsu.join(1,3);
+    dsu.join(9,10);
+    dsu.join(1,9);
+    dbg(dsu.connected(1,3));
+    dbg(dsu.connected(1,4));
+    dbg(dsu);
 }
 
 int main() {

@@ -55,6 +55,43 @@ const bool multi = true;
 
 
 
+class DSU {
+    public:
+        int sz;
+        vector<int> par;
+        vector<int> csz;
+
+        DSU(int sz){
+            this->sz=sz;
+            par = vector<int>(sz+1,-1);
+            csz = vector<int>(sz+1,1);
+        }
+
+        int getPar(int v){
+            if (par[v] == -1) {
+                return v;
+            }
+            par[v] = getPar(par[v]);
+            return par[v];
+        }
+
+        void join(int u, int v){
+            int U = getPar(u);
+            int V = getPar(v);
+            //same c, do nothing
+            if (U == V) return;
+            //force csz[V]<csz[U]
+            if (csz[U]<csz[V])swap(U,V);
+            //op
+            par[V] = U;
+            csz[U] += csz[V];
+        }
+        //chex CC
+        bool connected(int u, int v){
+            return getPar(u)==getPar(v);
+        }
+    };
+void __print(DSU x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.getPar(i)); __print(v);}
 
 
 int N,M;
@@ -66,6 +103,7 @@ vector<int> nodeDepth1;
 vector<int> nodeDepth2;
 vector<unordered_set<int>> layer1;
 vector<unordered_set<int>> layer2;
+
 void DFS(vector<vector<int>> &tree, vector<int> &nodeDepth, vector<int> &vpar, int node, int par) {
     nodeDepth[node]=nodeDepth[par]+1;
     vpar[node]=par;
@@ -78,11 +116,14 @@ void merge(vector<vector<int>> tree, int u, int v){
     //sz[U] > sz[V], child[V]->add->child[U]->fix->child[max(u,v)]
     int U = u; int V = v;
     if (sz(tree[u]) < sz(tree[v])) swap(U,V);
-    for (int x : tree[V]) tree[U].push_back(x);
+    for (int x : tree[V]) {
+        tree[U].push_back(x);
+    }
     tree[max(u,v)]=tree[U];
     tree[min(u,v)].clear();
 }
 vector<string> tryRoot(int root) {
+    dbg(root);
     //find depth[x],par[x]. partition tree into layers. for both trees.
     nodeDepth1.clear();nodeDepth1.resize(N+1);
     nodeDepth2.clear();nodeDepth2.resize(N+1);
@@ -99,25 +140,40 @@ vector<string> tryRoot(int root) {
         layer1[nodeDepth1[i]].insert(i);
         if (nodeDepth2[i]!=0) layer2[nodeDepth2[i]].insert(i);
     }
+    dbg(par1);
+    dbg(par2);
     vector<string> ans;
-    //unordered_set<int> seen;
+    DSU dsu(N);
+    
     //if par1[x]!=par2[x] then merge par1[x], par2[x]
     for (int layer=1;layer<N;layer++){
-        for (int x : layer1[layer+1]){
-            if (par1[x]!=par2[x]&&par2[x]!=0){
-                merge(tree1,par1[x],par2[x]);
-                ans.push_back(to_string(par1[x])+" "+to_string(par2[x]));
-                //seen.insert(min(par1[x],par2[x])*1000
+        dbg(layer);
+
+        //delete leaves on tree1 to match tree2 
+        for (int node : layer1[layer]){
+            int mx = 0;
+            for (int child : tree1[node]){
+                if (child==dsu.getPar(par1[child])) continue;
+                mx=max(mx,child);
+            }
+            for (int child : tree1[node]){
+                if (child==dsu.getPar(par1[child])) continue;
+                if (!layer2[layer+1].count(child)) {
+                    if (mx > child){
+                        dbg(mx,child);
+                        ans.push_back(to_string(mx)+" "+to_string(child));
+                    } else {
+                        return vector<string>(0);
+                    }
+                }
             }
         }
 
-        //delete leaves on tree1 to match tree2
-        int mx1 = 0; for (int x : layer1[layer]) mx1=max(mx1,x);
-        int mx2 = 0; for (int x : layer2[layer]) mx2=max(mx2,x);
-        if (mx1!=mx2) return vector<string>(0);
-        for (int x : layer1[layer]){
-            if (!layer2[layer].count(x)){
-                ans.push_back(to_string(mx1)+" "+to_string(x));
+        for (int x : layer1[layer+1]){
+            if (par1[x]!=par2[x]&&par2[x]!=0){
+                dbg(x,par1[x],par2[x]);
+                merge(tree1,par1[x],par2[x]);
+                ans.push_back(to_string(par1[x])+" "+to_string(par2[x]));
             }
         }
     }
@@ -162,6 +218,7 @@ void solve(){
     for (int i=1;i<=N;i++){
         vector<string> ans = tryRoot(i);
         if (sz(ans)!=0){
+            dbg(i);
             for (string x : ans) cout << x << endl;
             break;
         }

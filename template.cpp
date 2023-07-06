@@ -3,17 +3,8 @@
 using namespace std;
 
 typedef long long ll;
-//typedef vector<int> vi;
-//typedef vector<ll> vl;
-//typedef pair<int, int> pi;
-//typedef pair<ll, ll> pll;
 
 #define sz(x) (int)(x).size()
-//#define pb push_back
-//#define f first
-//#define s second
-//#define lb lower_bound
-//#define ub upper_bound
 #define all(x) x.begin(), x.end()
 const char nl = '\n';
 
