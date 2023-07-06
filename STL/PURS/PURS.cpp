@@ -57,7 +57,7 @@ const bool multi = true;
 
 class PURS {
     public:
-        int size;
+        int sz;
         vector<ll> tree;
         vector<ll> val;
         PURS (int n){
@@ -66,40 +66,42 @@ class PURS {
         PURS(int n, vector<int> arr){
             init(n);
             for (int i=1;i<=n;i++){
-                tree[i+size-1]=arr[i];
+                tree[i+sz-1]=arr[i];
                 val[i]=arr[i];
             }
-            for (int i=size-1;i>=1;i--)tree[i]=tree[i*2]+tree[i*2+1];
+            for (int i=sz-1;i>=1;i--)tree[i]=tree[i*2]+tree[i*2+1];
         }
         void init(int n){
-            size = 1;
-            while (size < n) size *= 2;
-            tree = vector<ll>(2*size+1);
+            sz = 1; while (sz < n) sz *= 2;
+            tree = vector<ll>(2*sz+1);
             val = vector<ll>(n+1);
         }
-        
-        void add (int k, int x){
-            set(k,tree[k+size-1]+x);
-        }
-        void set(int k, long x){
+        void add (int k, int x){ set(k,tree[k+sz-1]+x); }
+        void set(int k, ll x){
             val[k]=x;
-            k+=size-1;
+            k+=sz-1;
             tree[k]=x;
             for (k/=2;k>=1;k/=2) tree[k]=tree[2*k]+tree[2*k+1];
         }
-        long sum(int a, int b) {
-            a+=size-1; b+=size-1;
-            long ret = 0;
+        ll sum(int a, int b) {
+            a+=sz-1; b+=sz-1;
+            ll ret = 0;
             while (a<=b){
                 if (a%2==1) ret+=tree[a++];
                 if (b%2==0) ret+=tree[b--];
-                a/=2;
-                b/=2;
+                a/=2; b/=2;
             }
             return ret;
         }
 };
+void __print(PURS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.sum(i,i)); __print(v);}
+
 int main() {
-    PURS()
+    PURS purs(8);
+    purs.set(4,2);
+    purs.set(6,3);
+    dbg(purs.sum(1,8));
+    dbg(purs);
+
     return 0;
 }

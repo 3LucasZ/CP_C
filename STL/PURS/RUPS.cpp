@@ -40,11 +40,11 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-class PURS {
+class RUPS {
     public:
         int sz;
         vector<ll> tree;
-        PURS(int n){
+        RUPS(int n){
             sz = 1; while (sz < n) sz *= 2;
             tree.resize(2*sz+1);
         }
@@ -64,18 +64,18 @@ class PURS {
             }
         }
 };
-void __print(PURS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.get(i)); __print(v);}
+void __print(RUPS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.get(i)); __print(v);}
 
 
 int main() {
-    PURS P = PURS(8);
+    RUPS P = RUPS(8);
     P.add(1,5,3);
     P.add(5,8,2);
     dbg(P);
 
-    vector<PURS> V;
-    V.push_back(PURS(1));
-    V.push_back(PURS(1));
+    vector<RUPS> V;
+    V.push_back(RUPS(1));
+    V.push_back(RUPS(1));
     dbg(V);
     return 0;
 }
