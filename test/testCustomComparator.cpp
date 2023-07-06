@@ -78,10 +78,17 @@ int main() {
     sort(all(B),[](pair<int,int> a, pair<int,int> b){
         return b.first/b.second - a.first/a.second;
     });
-    sort(all(B),[](pair<int,int> a, pair<int,int> b){
+    sort(all(B),[&](pair<int,int> a, pair<int,int> b){
         return a.first/a.second > b.first/b.second;
     });
     dbg(B);
+
+    vector<int> cost = {4,5,6,3,3,24,5,1,7,8};
+    vector<int> ord = {0,1,2,3,4,5,6,7,8,9};
+    sort(all(ord),[&](int a, int b){ //NOTE: & lets you use outside scope.
+        return cost[a] < cost[b];
+    });
+    dbg(ord);
 
     return 0;
 }
