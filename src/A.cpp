@@ -3,17 +3,8 @@
 using namespace std;
 
 typedef long long ll;
-//typedef vector<int> vi;
-//typedef vector<ll> vl;
-//typedef pair<int, int> pi;
-//typedef pair<ll, ll> pll;
 
 #define sz(x) (int)(x).size()
-//#define pb push_back
-//#define f first
-//#define s second
-//#define lb lower_bound
-//#define ub upper_bound
 #define all(x) x.begin(), x.end()
 const char nl = '\n';
 
@@ -50,7 +41,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = false;
+const bool multi = true;
 
 
 
@@ -65,27 +56,26 @@ const bool multi = false;
 
 
 void solve(){
-    int N = 8;
-    int last;
+    int N, K; 
+    cin >> N >> K;
+    vector<int> A(N);
     for (int i=0;i<N;i++){
-        int x; cin >> x;
-        if (i>0){
-            if (x<last) {
-                cout << "No" << nl;
-                return;
-            }
-        }
-        if (x%25!=0){
-            cout << "No" << nl;
-            return;
-        }
-        if (x<100 || x>675){
-            cout << "No" << nl;
-            return;
-        }
-        last=x;
+        cin >> A[i];
     }
-    cout << "Yes" << nl;
+
+    vector<int> B;
+    for (int i=1;i<N;i++){
+        B.push_back(abs(A[i]-A[i-1]));
+    }   
+    sort(all(B));
+
+    int ans = 0;
+    for (int i=0;i<sz(B)-(K-1);i++){
+        ans += B[i];
+    }
+
+    cout << ans << nl;
+
 }
 
 int main() {

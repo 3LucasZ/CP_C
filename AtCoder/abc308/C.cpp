@@ -3,8 +3,17 @@
 using namespace std;
 
 typedef long long ll;
+//typedef vector<int> vi;
+//typedef vector<ll> vl;
+//typedef pair<int, int> pi;
+//typedef pair<ll, ll> pll;
 
 #define sz(x) (int)(x).size()
+//#define pb push_back
+//#define f first
+//#define s second
+//#define lb lower_bound
+//#define ub upper_bound
 #define all(x) x.begin(), x.end()
 const char nl = '\n';
 
@@ -41,7 +50,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = true;
+const bool multi = false;
 
 
 
@@ -52,30 +61,34 @@ const bool multi = true;
 
 
 
+struct Frac {
+    ll i,n,d;
+};
 
 
 
 void solve(){
-    int N; 
-    cin >> N;
-    vector<int> A(N);
-    for (int i=0;i<N;i++) cin >> A[i];
-    dbg(N,A);
-
-    int mx = 0;
-    unordered_set<int> pre;
+    int N; cin >> N;
+    vector<Frac> A(N);
     for (int i=0;i<N;i++){
-        unordered_set<int> newPre;
-        for (int x : pre){
-            newPre.insert(x^A[i]);
-            mx = max(mx,x^A[i]);
-        }
-        newPre.insert(A[i]);
-        mx = max(mx,A[i]);
-        pre = newPre;
+        A[i].i=i+1;
+        cin >> A[i].n >> A[i].d;
+        A[i].d+=A[i].n;
     }
+    dbg(N);
 
-    cout << mx << nl;
+    sort(all(A),[](Frac a, Frac b){
+        ll fracDif = a.n*b.d - a.d*b.n;
+        if (fracDif==0){
+            return a.i-b.i < 0;
+        }
+        return fracDif > 0;
+    });
+
+    for (int i=0;i<N;i++){
+        cout << A[i].i << " ";
+    }
+    cout << nl;
 }
 
 int main() {

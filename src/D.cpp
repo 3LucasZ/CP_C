@@ -3,17 +3,8 @@
 using namespace std;
 
 typedef long long ll;
-//typedef vector<int> vi;
-//typedef vector<ll> vl;
-//typedef pair<int, int> pi;
-//typedef pair<ll, ll> pll;
 
 #define sz(x) (int)(x).size()
-//#define pb push_back
-//#define f first
-//#define s second
-//#define lb lower_bound
-//#define ub upper_bound
 #define all(x) x.begin(), x.end()
 const char nl = '\n';
 
@@ -50,10 +41,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = false;
-
-int dr[4] = {0,0,1,-1};
-int dc[4] = {1,-1,0,0};
+const bool multi = true;
 
 
 
@@ -63,62 +51,11 @@ int dc[4] = {1,-1,0,0};
 
 
 
-const int MAXR = 500; 
-const int MAXC = 500; 
-char grid[MAXR][MAXC];
-bool vis[MAXR][MAXC];
-int R,C;
-char nxt[1000];
+
 
 
 
 void solve(){
-    nxt['s']='n';
-    nxt['n']='u';
-    nxt['u']='k';
-    nxt['k']='e';
-    nxt['e']='s';
-
-    cin >> R >> C;
-    for (int i=0;i<R;i++){
-        for (int j=0;j<C;j++){
-            cin >> grid[i][j];
-        }
-    }
-    dbg(R,C);
-    for (int i=0;i<R;i++){
-        for (int j=0;j<C;j++){
-            cerr << grid[i][j] << " ";
-        }
-        cerr << nl;
-    }
-    cerr << nl;
-
-    for (int i=0;i<R;i++) for (int j=0;j<C;j++) vis[i][j]=false;
-    vis[0][0]=true;
-    queue<pair<int,int>> q;
-    q.push(pair(0,0));
-
-    while (!q.empty()){
-        pair<int,int> next = q.front();
-        int r = next.first;
-        int c = next.second;
-        q.pop();
-
-        for (int i=0;i<4;i++){
-            int nr = r+dr[i];
-            int nc = c+dc[i];
-            if (nr<0 || nr>=R || nc < 0 || nc>=C || vis[nr][nc] || nxt[grid[r][c]]!=grid[nr][nc]) continue;
-            q.push(pair(r+dr[i],c+dc[i]));
-            vis[nr][nc]=true;
-        }
-    }
-
-    if (vis[R-1][C-1]){
-        cout << "Yes" << nl;
-    } else {
-        cout << "No" << nl;
-    }
 }
 
 int main() {

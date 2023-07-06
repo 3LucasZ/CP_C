@@ -3,17 +3,8 @@
 using namespace std;
 
 typedef long long ll;
-//typedef vector<int> vi;
-//typedef vector<ll> vl;
-//typedef pair<int, int> pi;
-//typedef pair<ll, ll> pll;
 
 #define sz(x) (int)(x).size()
-//#define pb push_back
-//#define f first
-//#define s second
-//#define lb lower_bound
-//#define ub upper_bound
 #define all(x) x.begin(), x.end()
 const char nl = '\n';
 
@@ -50,7 +41,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = false;
+const bool multi = true;
 
 
 
@@ -65,30 +56,24 @@ const bool multi = false;
 
 
 void solve(){
-    int N, M; 
-    cin >> N >> M;
-    vector<string> C(N);
-    for (int i=0;i<N;i++) cin >> C[i];
-    vector<string> D(M+1);
-    D[0]="";
-    for (int i=1;i<=M;i++) cin >> D[i];
-    vector<int> P(M+1);
-    for (int i=0;i<=M;i++) cin >> P[i];
-    dbg(N,M); 
-    dbg(C);
-    dbg(D);
-    dbg(P);
+    int N; cin >> N;
+    vector<int> A(N); for (int i=0;i<N;i++) cin >> A[i];
+    dbg(N,A);
 
-    int ans = 0;
+    int groups = 0;
+    ll tot = ((ll)1<<40)-1;
+    dbg(tot);
+    
     for (int i=0;i<N;i++){
-        auto it = find(all(D),C[i]);
-        int id = 0;
-        if (it!=D.end()){
-            id=it-D.begin();
+        tot &= A[i];
+        dbg(i,A[i],tot);
+        if (tot==0){
+            groups++;
+            tot = ((ll)1<<40)-1;
         }
-        ans += P[id];
     }
-    cout << ans << nl;
+
+    cout << max(1,groups) << nl;
 }
 
 int main() {
