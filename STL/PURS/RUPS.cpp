@@ -3,8 +3,17 @@
 using namespace std;
 
 typedef long long ll;
+//typedef vector<int> vi;
+//typedef vector<ll> vl;
+//typedef pair<int, int> pi;
+//typedef pair<ll, ll> pll;
 
 #define sz(x) (int)(x).size()
+//#define pb push_back
+//#define f first
+//#define s second
+//#define lb lower_bound
+//#define ub upper_bound
 #define all(x) x.begin(), x.end()
 const char nl = '\n';
 
@@ -39,60 +48,45 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbg(x...)
 #define dbgM(x)
 #endif
-
-const ll MOD = 1e9+7;
-const bool multi = true;
-
-
-
-
-
-
-
-
-
-
-
-
-
-void solve(){
-    int N; 
-    cin >> N;
-    vector<int> A(N);
-    for (int i=0;i<N;i++) cin >> A[i];
-    dbg(N,A);
-
-    int mx = 0;
-    int bit = 1<<8;
-
-    bool pre[bit]; for (int i=0;i<bit;i++) {pre[i]=false;}
-
-    for (int i=0;i<N;i++){
-        bool newPre[bit]; for (int i=0;i<bit;i++) newPre[i]=false;
-        for (int x=0;x<bit;x++){
-            if (pre[x]){
-                newPre[x^A[i]]=true;
-                mx = max(mx,x^A[i]);
+//1-indexed
+//range is []
+class RUPS {
+    public:
+        int size;
+        vector<ll> tree;
+        RUPS(int n){
+            size = 1;
+            while (size < n) size *= 2;
+            tree = vector<ll>(2*size+1);
+        }
+        long get(int k){
+            long ret = 0;
+            for (k+=size-1;k>=1;k/=2){
+                ret+=tree[k];
+            }
+            return ret;
+        }
+        void add(int a, int b, int x) {
+            a+=size-1;
+            b+=size-1;
+            while (a<=b){
+                if (a%2==1) tree[a++]+=x;
+                if (b%2==0) tree[b--]+=x;
+                a/=2;
+                b/=2;
             }
         }
-        newPre[A[i]]=true;
-        mx = max(mx,A[i]);
-
-        //reassign
-        for (int x=0;x<bit;x++) pre[x]=newPre[x];
-    }
-
-    cout << mx << nl;
-}
+};
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int T = 1;
-    if (multi) cin >> T;
-    for(int i=0;i<T;i++) {
-        dbgM(i+1);
-        solve();
-    }
+    PURS P = PURS(8);
+    P.add(1,5,3);
+    P.add(5,8,2);
+    dbg(P);
+
+    vector<PURS> V;
+    V.push_back(PURS(1));
+    V.push_back(PURS(1));
+    dbg(V);
     return 0;
 }
