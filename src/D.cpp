@@ -45,29 +45,29 @@ const bool multi = false;
 
 class PURS {
     public:
-        int size;
+        int sz;
         vector<ll> tree;
         vector<ll> val;
         PURS (int n){
             init(n);
         }
         void init(int n){
-            size = 1;
-            while (size < n) size *= 2;
-            tree = vector<ll>(2*size+1);
+            sz = 1;
+            while (sz < n) sz *= 2;
+            tree = vector<ll>(2*sz+1);
             val = vector<ll>(n+1);
         }
         void add (int k, int x){
-            set(k,tree[k+size-1]+x);
+            set(k,tree[k+sz-1]+x);
         }
         void set(int k, long x){
             val[k]=x;
-            k+=size-1;
+            k+=sz-1;
             tree[k]=x;
             for (k/=2;k>=1;k/=2) tree[k]=tree[2*k]+tree[2*k+1];
         }
         long sum(int a, int b) {
-            a+=size-1; b+=size-1;
+            a+=sz-1; b+=sz-1;
             long ret = 0;
             while (a<=b){
                 if (a%2==1) ret+=tree[a++];
@@ -78,6 +78,9 @@ class PURS {
             return ret;
         }
 };
+void __print(PURS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.sum(i,i)); __print(v);}
+
+
 
 
 
@@ -86,7 +89,11 @@ void solve(){
     int N,M,Q; cin >> N >> M >> Q;
     dbg(N,M,Q);
 
-    vector<char> S(N+1); for (int i=1;i<=N;i++) cin >> S[i];
+    vector<int> S(N+1); 
+    for (int i=1;i<=N;i++) {
+        char x; cin >> x;
+        S[i] = x-'0';
+    }
     dbg(S);
 
     vector<vector<int>> events(N+1);
@@ -99,16 +106,21 @@ void solve(){
 
     set<int> active;
     vector<int> minSeg(N+1);
+    int matter = N;
     for (int t=1;t<=N;t++){
         //add segs
         for (int event : events[t]){
             if (event > 0) active.insert(event);
         }
         //set cost based on lowest active seg
-        minSeg[t] = *active.begin();
+        if (active.empty()) {
+            minSeg[t]=INT_MAX;
+            matter--;
+        }
+        else minSeg[t] = *active.begin();
         //remove segs
         for (int event : events[t]){
-            if (event < 0) active.erase(event);
+            if (event < 0) active.erase(-event);
         }
     }
     dbg(minSeg);
@@ -117,20 +129,27 @@ void solve(){
     sort(all(ord), [&](int a, int b){
         return pair(minSeg[a],a) < pair(minSeg[b],b);
     });
+    vector<int> cost(N+1); for (int i=0;i<=N;i++){
+        cost[ord[i]]=i;
+    }
     dbg(ord);
+    dbg(cost);
 
     PURS purs = PURS(N);
     for (int i=1;i<=N;i++){
-        purs.set(ord[i],S[i]);
+        purs.set(cost[i],S[i]);
     }
     dbg(purs);
     
-    // for (int i=0;i<Q;i++){
-    //     int x; cin >> x;
-    //     S[x]=1-S[x];
-    //     int cost = getCost[x-1]+1;
-    //     purs.set(cost,S[x]);
-    // }
+    for (int i=0;i<Q;i++){
+        int x; cin >> x;
+        S[x]=1-S[x];
+        purs.set(cost[x],S[x]);
+
+        int ones = purs.sum(1,N);
+        int swaps = ones-purs.sum(1,ones);
+        cout << swaps << nl;
+    }
 }
 
 int main() {
