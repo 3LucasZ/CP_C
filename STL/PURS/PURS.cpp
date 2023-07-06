@@ -3,17 +3,8 @@
 using namespace std;
 
 typedef long long ll;
-//typedef vector<int> vi;
-//typedef vector<ll> vl;
-//typedef pair<int, int> pi;
-//typedef pair<ll, ll> pll;
 
 #define sz(x) (int)(x).size()
-//#define pb push_back
-//#define f first
-//#define s second
-//#define lb lower_bound
-//#define ub upper_bound
 #define all(x) x.begin(), x.end()
 const char nl = '\n';
 
@@ -49,42 +40,66 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
+const ll MOD = 1e9+7;
+const bool multi = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
 class PURS {
     public:
-        int sz;
+        int size;
         vector<ll> tree;
-        PURS(int n){
-            sz = 1; while (sz < n) sz *= 2;
-            tree.resize(2*sz+1);
+        vector<ll> val;
+        PURS (int n){
+            init(n);
         }
-        ll get(int k){
+        PURS(int n, vector<int> arr){
+            init(n);
+            for (int i=1;i<=n;i++){
+                tree[i+size-1]=arr[i];
+                val[i]=arr[i];
+            }
+            for (int i=size-1;i>=1;i--)tree[i]=tree[i*2]+tree[i*2+1];
+        }
+        void init(int n){
+            size = 1;
+            while (size < n) size *= 2;
+            tree = vector<ll>(2*size+1);
+            val = vector<ll>(n+1);
+        }
+        
+        void add (int k, int x){
+            set(k,tree[k+size-1]+x);
+        }
+        void set(int k, long x){
+            val[k]=x;
+            k+=size-1;
+            tree[k]=x;
+            for (k/=2;k>=1;k/=2) tree[k]=tree[2*k]+tree[2*k+1];
+        }
+        long sum(int a, int b) {
+            a+=size-1; b+=size-1;
             long ret = 0;
-            for (k+=sz-1;k>=1;k/=2) ret+=tree[k];
-            return ret;
-        }
-        void add(int a, int b, int x) {
-            a+=sz-1;
-            b+=sz-1;
             while (a<=b){
-                if (a%2==1) tree[a++]+=x;
-                if (b%2==0) tree[b--]+=x;
+                if (a%2==1) ret+=tree[a++];
+                if (b%2==0) ret+=tree[b--];
                 a/=2;
                 b/=2;
             }
+            return ret;
         }
 };
-void __print(PURS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.get(i)); __print(v);}
-
-
 int main() {
-    PURS P = PURS(8);
-    P.add(1,5,3);
-    P.add(5,8,2);
-    dbg(P);
-
-    vector<PURS> V;
-    V.push_back(PURS(1));
-    V.push_back(PURS(1));
-    dbg(V);
+    PURS()
     return 0;
 }

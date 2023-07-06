@@ -41,7 +41,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 const ll MOD = 1e9+7;
-const bool multi = true;
+const bool multi = false;
 
 class PURS {
     public:
@@ -98,45 +98,39 @@ void solve(){
     dbg(events);
 
     set<int> active;
-    vector<int> cost(N);
-    for (int t=0;t<N;t++){
+    vector<int> minSeg(N+1);
+    for (int t=1;t<=N;t++){
         //add segs
         for (int event : events[t]){
             if (event > 0) active.insert(event);
         }
-        //set cost based on best active seg
-        cost[t] = *active.begin();
+        //set cost based on lowest active seg
+        minSeg[t] = *active.begin();
         //remove segs
         for (int event : events[t]){
             if (event < 0) active.erase(event);
         }
     }
+    dbg(minSeg);
     
-    
-    vector<pair<int,int>> is(N);
-    for (int i=0;i<N;i++) is.push_back(pair(cost[i],i));
-    sort(all(is));
-
-    vector<int> getCost(N);
-    vector<int> getIdFromCost(N);
-    for (int i=0;i<N;i++){
-        int cost = i;
-        int id = is[i].second;
-        getCost[id] = cost;
-        getIdFromCost[cost] = id;
-    }
+    vector<int> ord(N+1); for (int i=0;i<=N;i++) ord[i]=i;
+    sort(all(ord), [&](int a, int b){
+        return pair(minSeg[a],a) < pair(minSeg[b],b);
+    });
+    dbg(ord);
 
     PURS purs = PURS(N);
     for (int i=1;i<=N;i++){
-        purs.set(i,S[getCost[i]]);
+        purs.set(ord[i],S[i]);
     }
+    dbg(purs);
     
-    for (int i=0;i<Q;i++){
-        int x; cin >> x;
-        S[x]=1-S[x];
-        int cost = getCost[x-1]+1;
-        purs.set(cost,S[x]);
-    }
+    // for (int i=0;i<Q;i++){
+    //     int x; cin >> x;
+    //     S[x]=1-S[x];
+    //     int cost = getCost[x-1]+1;
+    //     purs.set(cost,S[x]);
+    // }
 }
 
 int main() {

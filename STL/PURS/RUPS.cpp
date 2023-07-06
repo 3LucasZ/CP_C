@@ -3,17 +3,8 @@
 using namespace std;
 
 typedef long long ll;
-//typedef vector<int> vi;
-//typedef vector<ll> vl;
-//typedef pair<int, int> pi;
-//typedef pair<ll, ll> pll;
 
 #define sz(x) (int)(x).size()
-//#define pb push_back
-//#define f first
-//#define s second
-//#define lb lower_bound
-//#define ub upper_bound
 #define all(x) x.begin(), x.end()
 const char nl = '\n';
 
@@ -48,27 +39,23 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbg(x...)
 #define dbgM(x)
 #endif
-//1-indexed
-//range is []
-class RUPS {
+
+class PURS {
     public:
-        int size;
+        int sz;
         vector<ll> tree;
-        RUPS(int n){
-            size = 1;
-            while (size < n) size *= 2;
-            tree = vector<ll>(2*size+1);
+        PURS(int n){
+            sz = 1; while (sz < n) sz *= 2;
+            tree.resize(2*sz+1);
         }
-        long get(int k){
+        ll get(int k){
             long ret = 0;
-            for (k+=size-1;k>=1;k/=2){
-                ret+=tree[k];
-            }
+            for (k+=sz-1;k>=1;k/=2) ret+=tree[k];
             return ret;
         }
         void add(int a, int b, int x) {
-            a+=size-1;
-            b+=size-1;
+            a+=sz-1;
+            b+=sz-1;
             while (a<=b){
                 if (a%2==1) tree[a++]+=x;
                 if (b%2==0) tree[b--]+=x;
@@ -77,6 +64,8 @@ class RUPS {
             }
         }
 };
+void __print(PURS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.get(i)); __print(v);}
+
 
 int main() {
     PURS P = PURS(8);
