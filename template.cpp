@@ -16,6 +16,7 @@ void __print(int x) {cerr << x;}
 void __print(ll x) {cerr << x;}
 void __print(ld x) {cerr << x;}
 void __print(char x) {cerr << '\'' << x << '\'';}
+void __print(const char *x) {cerr << '\"' << x << '\"';}
 void __print(const string &x) {cerr << '\"' << x << '\"';}
 void __print(bool x) {cerr << (x ? "true" : "false");}
 template<typename T, typename V>

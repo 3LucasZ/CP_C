@@ -66,8 +66,8 @@ class LCA {
             }
             return cur;
         }
-        int getLCA(int u, int v){
-            //move to same level
+        int getMax(int u, int v){
+            //move to same level: force h[u]<h[v]
             if (h[v]>h[u])swap(u,v);
             u = getAnc(u, h[u]-h[v]);
             if (u==v) return u;
@@ -108,7 +108,7 @@ void solve(){
     for (int i=0;i<Q;i++){
         int u, v; 
         cin >> u >> v;
-        cout << lca.getLCA(u,v) << nl;
+        cout << lca.getMax(u,v) << nl;
     }
     
 }
