@@ -147,7 +147,7 @@ void solve(){
         purs.set(cost[x],S[x]);
 
         int ones = purs.sum(1,N);
-        int swaps = ones-purs.sum(1,ones);
+        int swaps = min(ones,matter)-purs.sum(1,min(ones,matter));
         cout << swaps << nl;
     }
 }
@@ -155,8 +155,7 @@ void solve(){
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    int T = 1;
-    if (multi) cin >> T;
+    int T = 1; if (multi) cin >> T;
     for(int i=0;i<T;i++) {
         dbgM(i+1);
         solve();
