@@ -1,4 +1,4 @@
-//tags: SegTree, Tree, Max Subarray Sum, Impl, Dual Reuse
+//tags: Tree, Binary Lifting, Max Subarray Sum, Reuse 
 #include <bits/stdc++.h>
 
 using namespace std;
