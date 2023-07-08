@@ -46,40 +46,25 @@ const bool multi = true;
 
 
 
-ll get_bit(ll num, int bit){ return (num&(1<<bit))>0;}
-string bin_to_str(ll bin, int len){
-	stringstream tret;
-	for (int i=0;i<len;i++) {tret<<(bin%2);bin>>=1;}
-    string ret = tret.str(); reverse(all(ret));
-	return ret;
-}
-ll str_to_bin(string bin){
-    reverse(all(bin));
-    ll ret = 0;
-    for (int i=0;i<sz(bin);i++) ret+=((bin[i]-'0')<<i);
-    return ret;
-}
-ll rotateL(ll bin,int len,int shift){
-    return (bin >> shift) | (bin << (len-shift));
-}
-ll rotateR(ll bin, int len, int shift){
-    return (bin << shift) | (bin >> (len-shift));
-}
-ll toggle(ll bin, int bit){
-    return bin^(1<<bit);
-}
-ll set(ll bin, int bit){
-    return bin|(1<<bit);
-}
-ll unset(ll bin, int bit){
-    return bin&(1<<bit);
+
+
+
+void solve(){
+    int N; cin >> N;
+    int zeros = 0;
+    for (int i=0;i<N;i++){
+        char x; cin >> x;
+        if (x=='0') zeros++;
+    }
+
+    if (zeros%2==0 || zeros==1) cout << "BOB" << endl;
+    else cout << "ALICE" << endl;
 }
 
 int main() {
-    dbg(str_to_bin("110"));
-    dbg(bin_to_str(6,3));
-    dbg(nth_bit(6,2));
-    dbg(nth_bit(6,1));
-    dbg(nth_bit(6,0));
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int T = 1; if (multi) cin >> T;
+    for(int i=0;i<T;i++) {dbgM(i+1);solve();}
     return 0;
 }

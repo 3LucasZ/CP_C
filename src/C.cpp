@@ -19,6 +19,11 @@ void __print(char x) {cerr << '\'' << x << '\'';}
 void __print(const char *x) {cerr << '\"' << x << '\"';}
 void __print(const string &x) {cerr << '\"' << x << '\"';}
 void __print(bool x) {cerr << (x ? "true" : "false");}
+
+template<typename T, typename V>
+void __print(const pair<T, V> &x);
+template<typename T>
+void __print(const T &x);
 template<typename T, typename V>
 void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ", "; __print(x.second); cerr << '}';}
 template<typename T>
@@ -46,40 +51,36 @@ const bool multi = true;
 
 
 
-ll get_bit(ll num, int bit){ return (num&(1<<bit))>0;}
-string bin_to_str(ll bin, int len){
-	stringstream tret;
-	for (int i=0;i<len;i++) {tret<<(bin%2);bin>>=1;}
-    string ret = tret.str(); reverse(all(ret));
-	return ret;
-}
-ll str_to_bin(string bin){
-    reverse(all(bin));
-    ll ret = 0;
-    for (int i=0;i<sz(bin);i++) ret+=((bin[i]-'0')<<i);
-    return ret;
-}
-ll rotateL(ll bin,int len,int shift){
-    return (bin >> shift) | (bin << (len-shift));
-}
-ll rotateR(ll bin, int len, int shift){
-    return (bin << shift) | (bin >> (len-shift));
-}
-ll toggle(ll bin, int bit){
-    return bin^(1<<bit);
-}
-ll set(ll bin, int bit){
-    return bin|(1<<bit);
-}
-ll unset(ll bin, int bit){
-    return bin&(1<<bit);
+
+
+
+void solve(){
+    int N;cin >> N;
+    unordered_map<int,vector<int>> numIds;
+    for (int i=1;i<=N;i++){
+        int x; cin >> x;
+        numIds[x].push_back(i);
+    }
+    dbg(N, numIds);
+
+    ll ans = 0;
+    for (pair<int, vector<int>> p : numIds){
+        dbg(p);
+        vector<int> ids = p.second;
+        ll Rsum = 0;
+        for (int i=sz(ids)-1;i>=0;i--){
+            ans += (ll)ids[i]*((ll)(N+1)*(sz(ids)-1-i)-Rsum);
+            Rsum += ids[i];
+        }
+        dbg(Rsum);
+    }
+    cout << ans << nl;
 }
 
 int main() {
-    dbg(str_to_bin("110"));
-    dbg(bin_to_str(6,3));
-    dbg(nth_bit(6,2));
-    dbg(nth_bit(6,1));
-    dbg(nth_bit(6,0));
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int T = 1; if (multi) cin >> T;
+    for(int i=0;i<T;i++) {dbgM(i+1);solve();}
     return 0;
 }
