@@ -27,7 +27,7 @@ void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ 
 void _print() {cerr << "]\n";}
 template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
-#ifdef DEBUG
+#ifdef DEBUGP
 #define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
 #define dbgM(x) cout << "CASE: " << x << endl;
 #else
@@ -68,12 +68,13 @@ void solve(){
         vector<int> numIds = ids[num];
         if (sz(numIds)==0) continue;
         int maxCover = max(numIds[0], N-1-numIds[sz(numIds)-1]);
-        dbg(maxCover);
+        dbg("pre", maxCover);
         for (int id=1;id<sz(numIds);id++){ //j is the index of the dig in A we are iterating on
             int dist = numIds[id]-numIds[id-1]-1;
-            int cover = (dist+1)/2;
-            maxCover=max(maxCover,cover);
+            dbg(dist);
+            maxCover=max(maxCover,dist);
         }
+        dbg("suf", maxCover);
         windowNums[maxCover+1].push_back(num);
     }
     dbg(windowNums);

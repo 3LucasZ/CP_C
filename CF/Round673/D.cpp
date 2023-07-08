@@ -44,12 +44,53 @@ const bool multi = true;
 
 
 
+int N;
+vector<int> A;
+vector<array<int,3>> ans;
 
-
-
-
+void go(int x, int y, int z) {
+    A[x]-=x*z;
+    A[y]+=x*z;
+    ans.push_back({x,y,z});
+}
 
 void solve(){
+    //in
+    cin >> N;
+    A.clear();A.resize(N+1);
+    ans.clear();
+    for (int i=1;i<=N;i++) cin >> A[i];
+    dbg(N,A);
+
+    //force
+    int sum = 0; for (int i=1;i<=N;i++) sum+=A[i];
+    if (sum%N) {
+        cout << -1 << nl; 
+        return;
+    }
+    
+    //push all to 1
+    for (int i=2;i<=N;i++){
+        //make A[i] divisible by i
+        if (A[i]%i){
+            go(1,i,i-A[i]%i);
+        }
+        //push A[i] to 1
+        go(i,1,A[i]/i);
+    }
+    //smooth to goal
+    for (int i=2;i<=N;i++){
+        go(1,i,sum/N);
+    }
+
+    //ret
+    cout << sz(ans) << nl;
+    for (auto &[x,y,z] : ans){
+        cout << x << " " << y << " " << z << nl;
+    }
+
+    assert(sz(ans)<=3*N);
+    for (int i=1;i<=N;i++) assert(A[i]==sum/N);
 }
 
 int main() {
