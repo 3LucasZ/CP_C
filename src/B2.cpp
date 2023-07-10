@@ -19,11 +19,6 @@ void __print(char x) {cerr << '\'' << x << '\'';}
 void __print(const char *x) {cerr << '\"' << x << '\"';}
 void __print(const string &x) {cerr << '\"' << x << '\"';}
 void __print(bool x) {cerr << (x ? "true" : "false");}
-
-template<typename T, typename V>
-void __print(const pair<T, V> &x);
-template<typename T>
-void __print(const T &x);
 template<typename T, typename V>
 void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ", "; __print(x.second); cerr << '}';}
 template<typename T>
@@ -54,29 +49,44 @@ const bool multi = true;
 
 
 
+void solve(){
+    int N; cin >> N;
+    vector<int> A; 
+    for (int i=0;i<N;i++){
+        char x; cin >> x;
+        A.push_back(x-'0');
+    }
+
+    int zeros = 0;
+    for (int i=0;i<N;i++) if (A[i]==0) zeros++;
+    dbg(N,A);
+
+    int off = 0;
+    for (int i=0;i<(N+1)/2;i++){
+        if (A[i]!=A[N-1-i]) off++;
+    }
+
+    bool mid0 = (N%2==1 && A[N/2]==0);
+
+    //CASE 1: starts paly
+    if (off==0){
+        if (zeros%2==0 || zeros==1) cout << "BOB" << endl;
+        else cout << "ALICE" << endl;
+    }
+    //CASE 2: mid0 and 1 off
+    else if (mid0 && off==1 && zeros==2){
+        cout << "DRAW" << endl;
+    }
+    //CASE 3: else
+    else {
+        cout << "ALICE" << endl;
+    }
+}
 
 int main() {
-    map<int,int> mp1;
-    mp1[1]=4;
-    dbg(mp1);
-
-    map<int,pair<int,int>> mp2;
-    mp2[1]={3,5};
-    dbg(mp2);
-    
-    vector<vector<vector<vector<int>>>> v1;
-    dbg(v1);
-
-    map<int, vector<int>> mp3;
-    vector<int> stuff = {3,4,5,5};
-    mp3[1]=stuff;
-    dbg(mp3);
-
-    vector<bool> ok(10);
-    //dbg(ok);
-
-    vector<int> v(10);
-    dbg(v);
-
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int T = 1; if (multi) cin >> T;
+    for(int i=0;i<T;i++) {dbgM(i+1);solve();}
     return 0;
 }
