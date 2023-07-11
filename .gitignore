@@ -33,4 +33,5 @@
 
 # custom
 build/
+io/
 src/tempCodeRunnerFile.cpp

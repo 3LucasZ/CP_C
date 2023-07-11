@@ -34,7 +34,7 @@ template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 #ifdef DEBUG
 #define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
-#define dbgM(x) cout << "CASE: " << x << endl;
+#define dbgM(x) cerr << "CASE: " << x << endl;
 #else
 #define dbg(x...)
 #define dbgM(x)
@@ -93,7 +93,7 @@ void solve(){
         dbg(i,L,R);
         //0 tail
         if (L==0){
-            for (int c : tree[0]) P[i]=tsz[c]*(N-1-tsz[c]);
+            for (int c : tree[0]) P[i]+=tsz[c]*(N-1-tsz[c]);
             P[i]/=2;
             P[i]+=N-1;
         }
@@ -122,7 +122,8 @@ void solve(){
 
     //calc
     for (int i=0;i<=N;i++){
-        cout << P[i]-P[i+1] << " ";
+        cout << P[i]-P[i+1];
+        if (i!=N) cout << " ";
     }
     cout << nl;
 }

@@ -47,15 +47,15 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 
 
 
-const int tcs = 1;
+const int tcs = 10000;
 
 template<class T> 
-T v_rand(vector<T> v){
+T v_rand(vector<T> &v){
     T i = rand() % sz(v);
     return v[i];
 }
 
-void tree(int l, int r) {
+void tree(int l=1, int r=1) {
     cout << r-l+1 << nl;
     vector<int> pars = {l};
     for (int u=l+1;u<=r;u++){
@@ -66,7 +66,8 @@ void tree(int l, int r) {
 }
 
 void gen(){
-    tree(0,10);
+    int N = 2+rand()%10;
+    tree(0,N-1);
 }
 
 int main() {
