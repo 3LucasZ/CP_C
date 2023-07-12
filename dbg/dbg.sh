@@ -2,7 +2,7 @@
 source ~/.zshrc
 
 #Only change these lines
-tcs=1000
+tcs=100
 verbose=false
 clear=true
 

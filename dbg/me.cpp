@@ -52,8 +52,12 @@ ll N;
 vector<vector<int>> tree;
 vector<ll> tsz;
 vector<int> tpar;
+int timer;
+vector<int> in;
+vector<int> out;
 
 void DFS(int node, int par){
+    in[node]=timer++;
     tpar[node]=par;
     for (int child : tree[node]){
         if (child==par) continue;
@@ -61,6 +65,11 @@ void DFS(int node, int par){
         tsz[node]+=tsz[child];
     }
     tsz[node]++;
+    out[node]=timer++;
+}
+
+bool u_in_v(int u, int v){
+    return in[v]<=in[u] && out[u]<=out[v];
 }
 
 void solve(){
@@ -76,40 +85,36 @@ void solve(){
 
     tsz.clear(); tsz.resize(N);
     tpar.clear(); tpar.resize(N);
+    timer=0;
+    in.clear(); in.resize(N);
+    out.clear(); out.resize(N);
     DFS(0,-1);
     dbg(tsz,tpar);
+    dbg(in,out);
 
-    vector<ll> P(N+2,0);
-    vector<bool> vis(N,false); //infected node?
+    vector<ll> P(N+1);
+    vector<bool> vis(N);
 
+    int Lc=0;
     //manual op for i=0
     vis[0]=true;
     P[0]=N*(N-1)/2;
 
-    //auto op for i>0
+    //manual op for i=1
+    P[1]=P[0];
+    for (int c : tree[0]){
+        P[1]-=tsz[c]*(tsz[c]-1)/2;
+        if (u_in_v(1, c)) {
+            Lc=c;
+        }
+    }
+
+    //auto op for i>=2
     int L=0; int R=0;
-    int Lc=0;
-    for (int i=1;i<=N;i++){
-        dbg(i,L,R);
-        //0 tail
-        if (L==0){
-            for (int c : tree[0]) P[i]+=tsz[c]*(N-1-tsz[c]);
-            P[i]/=2;
-            P[i]+=N-1;
-        }
-        //1 tail
-        else if (R==0){
-            P[i]=tsz[L]*(N-tsz[Lc]);
-        }
-        //2 tail
-        else {
-            P[i]=tsz[L]*tsz[R];
-        }
+    for (int i=1;i<N;i++){
         //infect i and up
-        if (i==N) break;
         int cur = i;
         while (!vis[cur]){
-            if (L==0 && tpar[cur]==0) Lc = cur;
             vis[cur]=true;
             cur=tpar[cur];
         }
@@ -117,14 +122,27 @@ void solve(){
         if (cur==L) L=i;
         else if (cur==R) R=i;
         else break;
+        dbg(i,L,R);
+
+        //1 tail
+        if (R==0){
+            P[i+1]=tsz[L]*(N-tsz[Lc]);
+        }
+        //2 tail
+        else {
+            P[i+1]=tsz[L]*tsz[R];
+        }
+        
     }
     dbg(P);
 
     //calc
+    for (int i=0;i<N;i++){
+        P[i]-=P[i+1];
+    }
+    //ret
     for (int i=0;i<=N;i++){
-        cout << P[i]-P[i+1];
-        //if (i!=N) cout << " ";
-        cout << " ";
+        cout << P[i] << " ";
     }
     cout << nl;
 }
