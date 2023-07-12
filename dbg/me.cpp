@@ -123,7 +123,8 @@ void solve(){
     //calc
     for (int i=0;i<=N;i++){
         cout << P[i]-P[i+1];
-        if (i!=N) cout << " ";
+        //if (i!=N) cout << " ";
+        cout << " ";
     }
     cout << nl;
 }

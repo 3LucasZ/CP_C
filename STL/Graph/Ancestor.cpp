@@ -43,6 +43,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
+const bool multi = true;
 
 
 
@@ -50,31 +51,26 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 
 
 
-bool multi = true;
 
-template<class T> 
-T v_rand(vector<T> &v){
-    T i = rng() % sz(v);
-    return v[i];
-}
+int timer = 0;
+vector<int> in;
+vector<int> out;
+vector<vector<int>> tree;
 
-void tree(int l=1, int r=1) {
-    cout << r-l+1 << nl;
-    vector<int> pars = {l};
-    for (int u=l+1;u<=r;u++){
-        int v = v_rand(pars);
-        cout << u << " " << v << nl;
-        pars.push_back(u);
+void DFS(int node, int par){
+    in[node]=timer++;
+    for (int child : tree[node]){
+        if (child==par) continue;
+        DFS(child,node);
     }
+    out[node]=timer++;
 }
 
-void gen(){
-    int N = 2+rng()%1000;
-    tree(0,N-1);
+bool u_in_v(int u, int v){
+    return in[v]<=in[u] && out[u]<=out[v];
 }
 
 int main() {
-    if (multi) cout << 1 << nl;
-    gen();
+    
     return 0;
 }
