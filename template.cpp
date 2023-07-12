@@ -12,7 +12,10 @@ const char nl = '\n';
 template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
 template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
 
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
 void __print(int x) {cerr << x;}
+void __print(unsigned int x) {cerr << x;}
 void __print(ll x) {cerr << x;}
 void __print(ld x) {cerr << x;}
 void __print(char x) {cerr << '\'' << x << '\'';}
