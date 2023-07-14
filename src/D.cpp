@@ -95,7 +95,7 @@ void solve(){
     vector<ll> P(N+1);
     vector<bool> vis(N);
 
-    int Lc=0;
+    int Lc;
     //manual op for i=0
     vis[0]=true;
     P[0]=N*(N-1)/2;
@@ -112,17 +112,19 @@ void solve(){
     //auto op for i>=2
     int L=0; int R=0;
     for (int i=1;i<N;i++){
-        //infect i and up
-        int cur = i;
-        while (!vis[cur]){
-            vis[cur]=true;
-            cur=tpar[cur];
+        if (!vis[i]){
+            //infect i and up
+            int cur = i;
+            while (!vis[cur]){
+                vis[cur]=true;
+                cur=tpar[cur];
+            }
+            //update L, R, check illegal
+            if (cur==L) L=i;
+            else if (cur==R) R=i;
+            else break;
+            dbg(i,L,R);
         }
-        //update L, R, check illegal
-        if (cur==L) L=i;
-        else if (cur==R) R=i;
-        else break;
-        dbg(i,L,R);
 
         //1 tail
         if (R==0){
@@ -132,7 +134,6 @@ void solve(){
         else {
             P[i+1]=tsz[L]*tsz[R];
         }
-        
     }
     dbg(P);
 

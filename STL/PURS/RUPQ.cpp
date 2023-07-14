@@ -40,68 +40,42 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-const ll MOD = 1e9+7;
-const bool multi = true;
-
-
-
-
-
-
-
-
-
-
-
-
-
-class PURS {
+class RUPQ {
     public:
         int sz;
         vector<ll> tree;
-        vector<ll> val;
-        PURS (int n){
-            init(n);
-        }
-        PURS(int n, vector<int> arr){
-            init(n);
-            for (int i=1;i<=n;i++){
-                tree[i+sz-1]=arr[i];
-                val[i]=arr[i];
-            }
-            for (int i=sz-1;i>=1;i--)tree[i]=tree[i*2]+tree[i*2+1];
-        }
-        void init(int n){
+        RUPQ(int n){
             sz = 1; while (sz < n) sz *= 2;
-            tree = vector<ll>(2*sz+1);
-            val = vector<ll>(n+1);
+            tree.resize(2*sz+1);
         }
-        void add (int k, int x){ set(k,tree[k+sz-1]+x); }
-        void set(int k, ll x){
-            val[k]=x;
-            k+=sz-1;
-            tree[k]=x;
-            for (k/=2;k>=1;k/=2) tree[k]=tree[2*k]+tree[2*k+1];
-        }
-        ll sum(int a, int b) {
-            a+=sz-1; b+=sz-1;
-            ll ret = 0;
-            while (a<=b){
-                if (a%2==1) ret+=tree[a++];
-                if (b%2==0) ret+=tree[b--];
-                a/=2; b/=2;
-            }
+        ll get(int k){
+            long ret = 0;
+            for (k+=sz-1;k>=1;k/=2) ret+=tree[k];
             return ret;
         }
+        void add(int a, int b, int x) {
+            a+=sz-1;
+            b+=sz-1;
+            while (a<=b){
+                if (a%2==1) tree[a++]+=x;
+                if (b%2==0) tree[b--]+=x;
+                a/=2;
+                b/=2;
+            }
+        }
 };
-void __print(PURS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.sum(i,i)); __print(v);}
+void __print(RUPS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.get(i)); __print(v);}
+
 
 int main() {
-    PURS purs(8);
-    purs.set(4,2);
-    purs.set(6,3);
-    dbg(purs.sum(1,8));
-    dbg(purs);
+    RUPS P = RUPS(8);
+    P.add(1,5,3);
+    P.add(5,8,2);
+    dbg(P);
 
+    vector<RUPS> V;
+    V.push_back(RUPS(1));
+    V.push_back(RUPS(1));
+    dbg(V);
     return 0;
 }
