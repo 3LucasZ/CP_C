@@ -56,50 +56,47 @@ const bool multi = true;
 
 
 class PURQ {
+    ll op(ll a, ll b){
+        return a+b;
+    }
     public:
         int sz;
         vector<ll> tree;
-        vector<ll> val;
+        
         PURQ (int n){
             init(n);
         }
-        PURQ(int n, vector<int> arr){
+        PURQ(int n, vector<ll> arr){
             init(n);
-            for (int i=1;i<=n;i++){
-                tree[i+sz-1]=arr[i];
-                val[i]=arr[i];
-            }
-            for (int i=sz-1;i>=1;i--)tree[i]=tree[i*2]+tree[i*2+1];
+            for (int i=1;i<=n;i++) tree[i+sz-1]=arr[i];
+            for (int i=sz-1;i>=1;i--)tree[i]=op(tree[i*2],tree[i*2+1]);
         }
         void init(int n){
             sz = 1; while (sz < n) sz *= 2;
             tree = vector<ll>(2*sz+1);
-            val = vector<ll>(n+1);
         }
-        void add (int k, int x){ set(k,tree[k+sz-1]+x); }
-        void set(int k, ll x){
-            val[k]=x;
+        void update(int k, ll x){
             k+=sz-1;
-            tree[k]=x;
-            for (k/=2;k>=1;k/=2) tree[k]=tree[2*k]+tree[2*k+1];
+            tree[k]=op(tree[k],x);
+            for (k/=2;k>=1;k/=2) tree[k]=op(tree[2*k],tree[2*k+1]);
         }
         ll query(int a, int b) {
             a+=sz-1; b+=sz-1;
             ll ret = 0;
             while (a<=b){
-                if (a%2==1) ret+=tree[a++];
-                if (b%2==0) ret+=tree[b--];
+                if (a%2==1) ret=op(ret,tree[a++]);
+                if (b%2==0) ret=op(ret,tree[b--]);
                 a/=2; b/=2;
             }
             return ret;
         }
 };
-void __print(PURS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.query(i,i)); __print(v);}
+void __print(PURQ x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.query(i,i)); __print(v);}
 
 int main() {
-    PURS purs(8);
-    purs.set(4,2);
-    purs.set(6,3);
+    PURQ purs(8);
+    purs.update(4,2);
+    purs.update(6,3);
     dbg(purs.query(1,8));
     dbg(purs);
 

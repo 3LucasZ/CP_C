@@ -41,6 +41,9 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 class RUPQ {
+    void op(ll &a, ll b){
+        a = a+b;
+    }
     public:
         int sz;
         vector<ll> tree;
@@ -48,34 +51,30 @@ class RUPQ {
             sz = 1; while (sz < n) sz *= 2;
             tree.resize(2*sz+1);
         }
-        ll get(int k){
-            long ret = 0;
-            for (k+=sz-1;k>=1;k/=2) ret+=tree[k];
+        ll query(int k){
+            ll ret = 0;
+            for (k+=sz-1;k>=1;k/=2) op(ret,tree[k]);
             return ret;
         }
-        void add(int a, int b, int x) {
+        void update(int a, int b, int x) {
             a+=sz-1;
             b+=sz-1;
             while (a<=b){
-                if (a%2==1) tree[a++]+=x;
-                if (b%2==0) tree[b--]+=x;
+                if (a%2==1) op(tree[a++],x);
+                if (b%2==0) op(tree[b--],x);
                 a/=2;
                 b/=2;
             }
         }
 };
-void __print(RUPS x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.get(i)); __print(v);}
+void __print(RUPQ x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.query(i)); __print(v);}
 
 
 int main() {
-    RUPS P = RUPS(8);
-    P.add(1,5,3);
-    P.add(5,8,2);
+    RUPQ P = RUPQ(8);
+    P.update(1,5,3);
+    P.update(5,8,2);
     dbg(P);
 
-    vector<RUPS> V;
-    V.push_back(RUPS(1));
-    V.push_back(RUPS(1));
-    dbg(V);
     return 0;
 }
