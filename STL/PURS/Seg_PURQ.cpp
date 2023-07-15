@@ -55,7 +55,7 @@ const bool multi = true;
 
 
 
-class PURQ {
+class SegTree {
     ll op(ll a, ll b){
         return a+b;
     }
@@ -63,10 +63,10 @@ class PURQ {
         int sz;
         vector<ll> tree;
         
-        PURQ (int n){
+        SegTree (int n){
             init(n);
         }
-        PURQ(int n, vector<ll> arr){
+        SegTree(int n, vector<ll> arr){
             init(n);
             for (int i=1;i<=n;i++) tree[i+sz-1]=arr[i];
             for (int i=sz-1;i>=1;i--)tree[i]=op(tree[i*2],tree[i*2+1]);
@@ -91,10 +91,10 @@ class PURQ {
             return ret;
         }
 };
-void __print(PURQ x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.query(i,i)); __print(v);}
+void __print(SegTree x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.query(i,i)); __print(v);}
 
 int main() {
-    PURQ purs(8);
+    SegTree purs(8);
     purs.update(4,2);
     purs.update(6,3);
     dbg(purs.query(1,8));
