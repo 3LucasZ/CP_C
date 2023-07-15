@@ -75,9 +75,9 @@ class PURQ {
             sz = 1; while (sz < n) sz *= 2;
             tree = vector<ll>(2*sz+1);
         }
-        void update(int k, ll x){
+        void update(int k, ll v){
             k+=sz-1;
-            tree[k]=op(tree[k],x);
+            tree[k]=op(tree[k],v);
             for (k/=2;k>=1;k/=2) tree[k]=op(tree[2*k],tree[2*k+1]);
         }
         ll query(int a, int b) {

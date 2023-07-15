@@ -41,30 +41,46 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 
 class lazyRUPQ {
-    void op(ll &a, ll b){
-        a = a+b;
+    ll op(ll a, ll b){
+        if (b==NO_OP) return a;
+        return b;
     }
     public:
         int sz;
         vector<ll> tree;
+        ll NO_OP = LLONG_MAX;
+
         lazyRUPQ(int n){
             sz = 1; while (sz < n) sz *= 2;
-            tree.resize(2*sz+1);
+            tree = vector<ll>(2*sz+1,NO_OP);
         }
-        ll query(int k){
-            ll ret = 0;
-            for (k+=sz-1;k>=1;k/=2) op(ret,tree[k]);
-            return ret;
+        void push(int x, int lx, int rx) {
+            if (lx==rx) return;
+            tree[2*x]=op(tree[2*x],tree[x]);
+            tree[2*x+1]=op(tree[2*x+1],tree[x]);
+            tree[x] = NO_OP;
         }
-        void update(int a, int b, int v) {
-            a+=sz-1;
-            b+=sz-1;
-            while (a<=b){
-                if (a%2==1) op(tree[a++],v);
-                if (b%2==0) op(tree[b--],v);
-                a/=2;
-                b/=2;
+        void update (int l, int r, int v){update(l,r,v,1,1,sz);}
+        void update(int l, int r, int v, int x, int lx, int rx) {
+            push(x,lx,rx);
+            if (lx>r || rx<l) return; //seg out
+            else if (l<=lx && rx<=r) { //seg full
+                tree[x]=op(tree[x],v);
+            } else {
+                int m = (lx+rx)/2;
+                update(l,r,v,2*x,lx,m);
+                update(l,r,v,2*x+1,m+1,rx); 
             }
+        }
+        ll query(int i) {return query(i,1,1,sz);}
+        ll query(int i, int x, int lx, int rx){
+            push(x,lx,rx);
+            if (lx==rx) return tree[x];
+            int m = (lx+rx)/2;
+            ll res;
+            if (i<=m) res = query(i,2*x,lx,m);
+            else res = query(i,2*x+1,m+1,rx);
+            return op(res,tree[x]);
         }
 };
 void __print(lazyRUPQ x) {vector<ll> v; for (int i=1;i<=x.sz;i++) v.push_back(x.query(i)); __print(v);}
@@ -74,6 +90,7 @@ int main() {
     lazyRUPQ P = lazyRUPQ(8);
     P.update(1,5,3);
     P.update(5,8,2);
+    dbg(P.tree);
     dbg(P);
 
     return 0;
