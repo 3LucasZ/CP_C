@@ -12,10 +12,7 @@ const char nl = '\n';
 template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
 template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
 
-mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
 void __print(int x) {cerr << x;}
-void __print(unsigned int x) {cerr << x;}
 void __print(ll x) {cerr << x;}
 void __print(ld x) {cerr << x;}
 void __print(char x) {cerr << '\'' << x << '\'';}
@@ -58,6 +55,26 @@ const bool multi = true;
 
 
 void solve(){
+    int N;cin >> N;
+    unordered_map<int,vector<int>> numIds;
+    for (int i=1;i<=N;i++){
+        int x; cin >> x;
+        numIds[x].push_back(i);
+    }
+    dbg(N, numIds);
+
+    ll ans = 0;
+    for (pair<int, vector<int>> p : numIds){
+        dbg(p);
+        vector<int> ids = p.second;
+        ll Rsum = 0;
+        for (int i=sz(ids)-1;i>=0;i--){
+            ans += (ll)ids[i]*((ll)(N+1)*(sz(ids)-1-i)-Rsum);
+            Rsum += ids[i];
+        }
+        dbg(Rsum);
+    }
+    cout << ans << nl;
 }
 
 int main() {
