@@ -28,7 +28,7 @@ void __print(const pair<T, V> &x);
 template<typename T>
 void __print(const T &x);
 template<typename T, typename V>
-void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ", "; __print(x.second); cerr << '}';}
+void __print(const pair<T, V> &x) {cerr << '<'; __print(x.first); cerr << ", "; __print(x.second); cerr << '>';}
 template<typename T>
 void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? ", " : ""), __print(i); cerr << "}";}
 
@@ -58,6 +58,28 @@ const bool multi = true;
 
 
 void solve(){
+    int N; cin >> N;
+    vector<int> A(N+1);
+    vector<int> seen(N+1);
+    for (int i=1;i<=N;i++) {
+        cin >> A[i];
+    }
+    dbg(N,A);
+
+    vector<vector<int>> dp(N+1,vector<int>(2));
+    for (int i=1;i<=N;i++){
+        dp[i][0]=max(dp[i-1][0],dp[i-1][1]);
+        int j = seen[A[i]];
+        if (seen[A[i]]){
+            ckmax(dp[i][1],max(dp[j-1][0],dp[j-1][1])+i-j+1);
+            ckmax(dp[i][1],dp[j][1]+i-j);
+        }
+        seen[A[i]]=i;
+    }
+    dbg(seen);
+    dbg(dp);
+
+    cout << max(dp[N][0],dp[N][1]) << nl;
 }
 
 int main() {

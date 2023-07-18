@@ -28,7 +28,7 @@ void __print(const pair<T, V> &x);
 template<typename T>
 void __print(const T &x);
 template<typename T, typename V>
-void __print(const pair<T, V> &x) {cerr << '<'; __print(x.first); cerr << ", "; __print(x.second); cerr << '>';}
+void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ", "; __print(x.second); cerr << '}';}
 template<typename T>
 void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? ", " : ""), __print(i); cerr << "}";}
 
@@ -58,6 +58,24 @@ const bool multi = true;
 
 
 void solve(){
+    int N; cin >> N;
+    vector<ll> A(N+1);
+    ll mx = LLONG_MIN;
+    for (int i=1;i<=N;i++){
+        cin >> A[i];
+        ckmax(mx,A[i]);
+    }
+
+    vector<ll> dp(N+1);
+    dp[0]=0;
+    dp[1]=max(A[1],0LL);
+    for (int i=2;i<=N;i++){
+        dp[i]=dp[i-2] + max(A[i],0LL);
+    }
+
+    ll ret = max(dp[N],dp[N-1]);
+    if (ret==0) cout << mx << nl;
+    else cout << ret << nl;
 }
 
 int main() {
