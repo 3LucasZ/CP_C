@@ -59,11 +59,15 @@ Stored as you see it!
 |0 1|
 HAZARD:
 mult(a,b) means transform b by a. Very confusing, sometimes.
+DONT po(a,0)
+CUSTOM: 
+cfg X op
+cfg "matId" where mul(A,id)==A
 */
 const ll MOD=1e9+7;
 
 typedef vector<vector<ll>> mat;
-mat matFrom(int r, int c) { return mat(r,vector<ll>(c));};
+mat matFrom(int r, int c, ll fill) { return mat(r,vector<ll>(c,fill));};
 mat matId(int n) { 
     mat ret = matFrom(n,n);
     for (int i=0;i<n;i++) ret[i][i]=1;
@@ -76,14 +80,14 @@ mat mul(const mat& a, const mat& b){
     //ret[r][c] = X(A[r],B[c]) where X is any operation like dot product
     for (int r=0;r<sz(a);r++) for (int c=0;c<sz(b[0]);c++){ //pick point r,c
         for (int k=0;k<sz(b);k++){ //iter l->r
-            ret[r][c] = (ret[r][c]+a[r][k]*b[k][c])%MOD;
+            ret[r][c] = (ret[r][c]+a[r][k]*b[k][c])%MOD; //cfg X op
         }
     }
     return ret;
 }
 
 mat po(const mat& a, ll b){
-    if (b==0) return matId(sz(a));
+    assert(b>=1); if (b==1) return a;
     else if (b%2==0) return po(mul(a,a), b/2);
     else return mul(a,po(a,b-1));
 }
