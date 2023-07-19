@@ -60,6 +60,8 @@ Stored as you see it!
 HAZARD:
 mult(a,b) means transform b by a. Very confusing, sometimes.
 */
+ll MOD=1e9+7;
+
 typedef vector<vector<ll>> mat;
 mat matFrom(int r, int c) { return mat(r,vector<ll>(c));};
 mat matId(int n) { 
@@ -67,8 +69,6 @@ mat matId(int n) {
     for (int i=0;i<n;i++) ret[i][i]=1;
     return ret;
 }
-
-ll MOD=1e9+7;
 
 mat mul(const mat& a, const mat& b){
     //assert(sz(a[0])==sz(b)); //Rule: a cols == b rows
@@ -89,9 +89,6 @@ mat po(const mat& a, ll b){
     else return mul(a,po(a,b-1));
 }
 
-
-
-
 int main() {
     mat m1 = {{6,-2},{3,7}};
     mat m2 = {{1,-2},{-3,4}};
@@ -106,7 +103,6 @@ int main() {
     mat m3 = {{1,2,3},{4,5,6},{7,8,9}};
     dbg(mul(m3,m3)); //{{30, 36, 42}, {66, 81, 96}, {102, 126, 150}}
     dbg(po(m3,2LL));
-
 
     return 0;
 }

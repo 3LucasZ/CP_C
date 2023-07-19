@@ -55,7 +55,7 @@ const bool multi = false;
 
 
 
-
+ll MOD=1e9+7;
 typedef vector<vector<ll>> mat;
 mat matFrom(int r, int c) { return mat(r,vector<ll>(c));};
 mat matId(int n) { 
@@ -63,8 +63,6 @@ mat matId(int n) {
     for (int i=0;i<n;i++) ret[i][i]=1;
     return ret;
 }
-
-ll MOD=1e9+7;
 
 mat mul(const mat& a, const mat& b){
     //assert(sz(a[0])==sz(b)); //Rule: a cols == b rows
@@ -78,33 +76,23 @@ mat mul(const mat& a, const mat& b){
     }
     return ret;
 }
-mat exp(mat x, ll y) {
-    mat r(x.size(), vector<ll>(x.size()));
-    for ( int i = 0; i < x.size(); i++) r[i][i] = 1;
-    while (y>0){
-        if (y&1) {
-            r = mul(r,x);
-        }
-        y=y>>1;
-        x = mul(x,x);
-    }
-    return r;
-}
+
 mat po(const mat& a, ll b){
     if (b==0) return matId(sz(a));
     else if (b%2==0) return po(mul(a,a), b/2);
     else return mul(a,po(a,b-1));
 }
+
 void solve(){
-    
     ll N,M,K; cin >> N >> M >> K;
+    dbg(N,M,K);
 
     mat graph = matFrom(N,N);
-
     for (int i=0;i<M;i++){
         int u, v; cin >> u >> v;
         graph[u-1][v-1]++;
     }
+    dbg(graph);
 
     mat init = matFrom(N,1); init[0][0]=1;
 
@@ -115,7 +103,7 @@ void solve(){
         }
     }
 
-    mat trans = exp(op, K);
+    mat trans = po(op, K);
 
     mat res = mul(trans,init);
 
@@ -123,12 +111,9 @@ void solve(){
 }
 
 int main() {
-    auto ti = std::chrono::system_clock::now();
-    ios::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     int T = 1; if (multi) cin >> T;
     for(int i=0;i<T;i++) {dbgM(i+1);solve();}
-    auto tf = std::chrono::system_clock::now();
-    auto dt = tf-ti;
-    dbg(dt.count());
     return 0;
 }
