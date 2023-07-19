@@ -1,21 +1,22 @@
 #!/bin/zsh
+#WARNING NOT DONE YET!
 source ~/.zshrc
 
-#Prereq:
-#1. All data in folder: Desktop/Testcases
-#2. Input files are x.in
-#3. Corresponding output files are x.out
-
-#Only change these lines
-mySol=ComfortablyNumb.java
-
 #Setup
-echo Starting Judge
-A=$CP/UsacoJava/src
-echo Project Folder: $CP
-echo Src Folder: $A
-B=$HOME/Desktop/Testcases
-echo Pipe Folder: $B
+echo Starting verify
+workspaceRoot="/Users/lucaszheng/Documents/GitHub/CP_C"
+echo workspaceRoot: $workspaceRoot
+
+build() {
+  g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_ASSERTIONS -ggdb3 -fsanitize=address,undefined -g -fno-sanitize-recover -ferror-limit=2 -Wl,-stack_size,0x10000000 $workspaceRoot/dbg/$1.cpp -o $workspaceRoot/build/$1
+}
+mild_build() {
+  g++ -std=c++17 -O2 -D_GLIBCXX_ASSERTIONS -ggdb3 -fsanitize=address,undefined -g -fno-sanitize-recover -ferror-limit=2 -Wl,-stack_size,0x10000000 $workspaceRoot/dbg/$1.cpp -o $workspaceRoot/build/$1
+}
+unsafe_build() {
+  g++ -std=c++17 -O2 -Wl,-stack_size,0x10000000 $workspaceRoot/dbg/$1.cpp -o $workspaceRoot/build/$1
+}
+build me
 
 #Loop through all .in files
 tcs=0

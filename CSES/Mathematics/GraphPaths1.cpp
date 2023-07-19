@@ -54,7 +54,7 @@ const bool multi = false;
 
 
 
-
+const ll MOD=1e9+7;
 
 typedef vector<vector<ll>> mat;
 mat matFrom(int r, int c) { return mat(r,vector<ll>(c));};
@@ -63,8 +63,6 @@ mat matId(int n) {
     for (int i=0;i<n;i++) ret[i][i]=1;
     return ret;
 }
-
-ll MOD=1e9+7;
 
 mat mul(const mat& a, const mat& b){
     //assert(sz(a[0])==sz(b)); //Rule: a cols == b rows
@@ -78,23 +76,13 @@ mat mul(const mat& a, const mat& b){
     }
     return ret;
 }
-mat exp(mat x, ll y) {
-    mat r(x.size(), vector<ll>(x.size()));
-    for ( int i = 0; i < x.size(); i++) r[i][i] = 1;
-    while (y>0){
-        if (y&1) {
-            r = mul(r,x);
-        }
-        y=y>>1;
-        x = mul(x,x);
-    }
-    return r;
-}
+
 mat po(const mat& a, ll b){
     if (b==0) return matId(sz(a));
     else if (b%2==0) return po(mul(a,a), b/2);
     else return mul(a,po(a,b-1));
 }
+
 void solve(){
     
     ll N,M,K; cin >> N >> M >> K;
@@ -115,7 +103,7 @@ void solve(){
         }
     }
 
-    mat trans = exp(op, K);
+    mat trans = po(op, K);
 
     mat res = mul(trans,init);
 
