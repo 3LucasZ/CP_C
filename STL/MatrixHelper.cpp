@@ -62,12 +62,12 @@ mult(a,b) means transform b by a. Very confusing, sometimes.
 DONT po(a,0)
 CUSTOM: 
 cfg X op
-cfg "matId" where mul(A,id)==A
+(rare, hard if not regular multiplication, usually useless, so try not to) cfg "matId" where mul(A,id)==A
 */
 const ll MOD=1e9+7;
 
 typedef vector<vector<ll>> mat;
-mat matFrom(int r, int c, ll fill) { return mat(r,vector<ll>(c,fill));};
+mat matFrom(int r, int c, ll fill=0) { return mat(r,vector<ll>(c,fill));};
 mat matId(int n) { 
     mat ret = matFrom(n,n);
     for (int i=0;i<n;i++) ret[i][i]=1;
