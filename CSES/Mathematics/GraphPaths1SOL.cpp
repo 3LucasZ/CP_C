@@ -43,19 +43,9 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-template<typename... T>
-#define error(args...) { string _s = #args; replace(_s.begin(), _s.end(), ',', ' '); stringstream _ss(_s); istream_iterator<string> _it(_ss); err(_it, args); }
-void err(istream_iterator<string> it) {}
-template<typename T, typename... Args>
-void err(istream_iterator<string> it, T a, Args... args) {cerr << *it << "=" << a << ", "; err(++it, args...);}
-
 #define int long long
-#define pb push_back
-#define F first
-#define S second
 #define vi vector<int>
 #define vvi vector<vi>
-const int inf = 1LL<<62;
 const int md = 1000000007;
  
 typedef vector<vector<ll>> mat;
@@ -79,33 +69,11 @@ mat mul(const mat& a, const mat& b){
     return ret;
 }
 
-mat exp(const mat& a, ll b){
+mat po(const mat& a, ll b){
     if (b==0) return matId(sz(a));
-    else if (b%2==0) return exp(mul(a,a), b/2);
-    else return mul(a,exp(a,b-1));
+    else if (b%2==0) return po(mul(a,a), b/2);
+    else return mul(a,po(a,b-1));
 }
-
-// vvi mul(vvi a, vvi b) {
-//     vvi c(a.size(), vi(b[0].size()));
-//     for (int i = 0; i < a.size(); i++) 
-//         for (int j = 0; j < b[0].size(); j++)
-//             for ( int k = 0; k < a[0].size(); k++) 
-//                 (c[i][j] += a[i][k]*b[k][j]%md)%=md;
-//     return c;
-// }
-
-// vvi exp( vvi x, int y) {
-//     vvi r(x.size(), vi(x.size()));
-//     for ( int i = 0; i < x.size(); i++) r[i][i] = 1;
-//     while (y>0){
-//         if (y&1) {
-//             r = mul(r,x);
-//         }
-//         y=y>>1;
-//         x = mul(x,x);
-//     }
-//     return r;
-// }
 
 void solve(){
     ll N,M,K; cin >> N >> M >> K;
@@ -126,14 +94,13 @@ void solve(){
         }
     }
 
-    mat trans = exp(op, K);
+    mat trans = po(op, K);
 
     mat res = mul(trans,init);
 
     cout << res[N-1][0] << endl;
 }    
 signed main(){
-        auto ti = std::chrono::system_clock::now();
     ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
     #ifdef LOCAL
     freopen("input.txt", "r" , stdin);
@@ -145,8 +112,4 @@ signed main(){
         solve();
         cout<<'\n';
     }
-
-        auto tf = std::chrono::system_clock::now();
-    auto dt = tf-ti;
-    //cout << (dt.count());
 }
