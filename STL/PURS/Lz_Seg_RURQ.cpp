@@ -46,6 +46,9 @@ Verified:
 https://codeforces.com/edu/course/2/lesson/5/2/practice/contest/279653/problem/A
 https://codeforces.com/edu/course/2/lesson/5/2/practice/contest/279653/problem/B
 https://codeforces.com/edu/course/2/lesson/5/2/practice/contest/279653/problem/C
+Note:
+0-indexed api
+1-indexed implementation
 Upd: associative
 Qry: associative
 Must: distributive property i.e. (a op v) cmb (b op v) === cmb(a,b) op v
@@ -93,7 +96,7 @@ class SegTree {
             val[2*x+1]=upd_op(val[2*x+1],ops[x],(rx-lx+1)/2);
             ops[x] = NO_OP;
         }
-        void update (int l, int r, ll v){update(l,r,v,1,1,sz);}
+        void update (int l, int r, ll v){update(l+1,r+1,v,1,1,sz);}
         void update(int l, int r, ll v, int x, int lx, int rx) {
             push_down(x,lx,rx);
             if (lx>r || rx<l) return; //seg out
@@ -106,7 +109,7 @@ class SegTree {
                 val[x]=qry_op(val[2*x],val[2*x+1]);
             }
         }
-        ll query(int l, int r) {return query(l,r,1,1,sz);}
+        ll query(int l, int r) {return query(l+1,r+1,1,1,sz);}
         ll query(int l, int r, int x, int lx, int rx){
             push_down(x,lx,rx);
             if (lx>r || rx<l) return NEUTRAL; //seg out

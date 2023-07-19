@@ -60,15 +60,20 @@ ll graph[101][101];
 void solve(){
     //in
     int N; int M; cin >> N >> M;
+    for(int i=0;i<=100;i++){
+        for(int j=0;j<=100;j++){
+            graph[i][j]=-1;
+        }
+    }
     for (int i=0;i<M;i++){
         int u, v; ll c; cin >> u >> v >> c;
         graph[u][v]=c;
         graph[v][u]=c;
     }
-    dbg(graph[1][1]);
-    for (int i=1;i<N;i++){
-        dbg(graph[1][i]);
-    }
+    // dbg(graph[1][1]);
+    // for (int i=1;i<=N;i++){
+    //     dbg(graph[1][i]);
+    // }
 
     set<int> infected;
     infected.insert(N);
@@ -81,7 +86,7 @@ void solve(){
         ll mn = LLONG_MAX;
         for (int u : infected){
             for (int v=1;v<=N;v++){
-                if (graph[u][v]>0){
+                if (infected.count(v)==0 && graph[u][v]!=-1){
                     sus.push_back(pair(u,v));
                     mn = min(mn,graph[u][v]);
                 }
