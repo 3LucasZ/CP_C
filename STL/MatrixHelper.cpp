@@ -60,7 +60,7 @@ Stored as you see it!
 HAZARD:
 mult(a,b) means transform b by a. Very confusing, sometimes.
 */
-ll MOD=1e9+7;
+const ll MOD=1e9+7;
 
 typedef vector<vector<ll>> mat;
 mat matFrom(int r, int c) { return mat(r,vector<ll>(c));};
@@ -73,11 +73,10 @@ mat matId(int n) {
 mat mul(const mat& a, const mat& b){
     //assert(sz(a[0])==sz(b)); //Rule: a cols == b rows
 	mat ret(sz(a),vector<ll>(sz(b[0]))); //Ret: a rows x b cols
-    for (int i=0;i<sz(a);i++){
-        for (int j=0;j<sz(b[0]);j++){
-            for (int k=0;k<sz(b);k++){
-                ret[i][j] = (ret[i][j]+a[i][k]*b[k][j])%MOD;
-            }
+    //ret[r][c] = X(A[r],B[c]) where X is any operation like dot product
+    for (int r=0;r<sz(a);r++) for (int c=0;c<sz(b[0]);c++){ //pick point r,c
+        for (int k=0;k<sz(b);k++){ //iter l->r
+            ret[r][c] = (ret[r][c]+a[r][k]*b[k][c])%MOD;
         }
     }
     return ret;
