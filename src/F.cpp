@@ -3,32 +3,36 @@
 using namespace std;
 
 typedef long long ll;
+typedef long double ld;
 
 #define sz(x) (int)(x).size()
 #define all(x) x.begin(), x.end()
 const char nl = '\n';
+const ll inf = 2e18;
 
 template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
 template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
 
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
 void __print(int x) {cerr << x;}
-void __print(long x) {cerr << x;}
-void __print(long long x) {cerr << x;}
-void __print(unsigned x) {cerr << x;}
-void __print(unsigned long x) {cerr << x;}
-void __print(unsigned long long x) {cerr << x;}
-void __print(float x) {cerr << x;}
-void __print(double x) {cerr << x;}
-void __print(long double x) {cerr << x;}
+void __print(unsigned int x) {cerr << x;}
+void __print(ll x) {cerr << x;}
+void __print(ld x) {cerr << x;}
 void __print(char x) {cerr << '\'' << x << '\'';}
 void __print(const char *x) {cerr << '\"' << x << '\"';}
 void __print(const string &x) {cerr << '\"' << x << '\"';}
 void __print(bool x) {cerr << (x ? "true" : "false");}
- 
+
 template<typename T, typename V>
-void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ", "; __print(x.second); cerr << '}';}
+void __print(const pair<T, V> &x);
+template<typename T>
+void __print(const T &x);
+template<typename T, typename V>
+void __print(const pair<T, V> &x) {cerr << '<'; __print(x.first); cerr << ", "; __print(x.second); cerr << '>';}
 template<typename T>
 void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? ", " : ""), __print(i); cerr << "}";}
+
 void _print() {cerr << "]\n";}
 template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
@@ -40,46 +44,29 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-/*
-@daftdove 7/15/23
-Verified: 
-https://codeforces.com/edu/course/2/lesson/5/2/practice/contest/279653/problem/A
-https://codeforces.com/edu/course/2/lesson/5/2/practice/contest/279653/problem/B
-https://codeforces.com/edu/course/2/lesson/5/2/practice/contest/279653/problem/C
-Note:
-0-indexed api
-1-indexed implementation
-Upd: associative
-Qry: associative
-Must: distributive property i.e. (a op v) cmb (b op v) === cmb(a,b) op v
-Settings:
-NEUTRAL, NO_OP, upd_op, qry_op, build(sets default val[]), DEF_OP(sets default op[])
-Extensions:
-(add, min)
-NEUTRAL = inf, NO_OP = 0, DEF_OP = 0, upd_op = a+b, qry_op = min(a,b)
-(set, sum)
-NEUTRAL = 0, NO_OP = inf, DEF_OP = 0, upd_op = a | b*k, qry_op = a+b
-*/
+const bool multi = false;
 
-ll MOD = 1e9+7;
+
+
+const ll MOD = 1e9+7;
 class SegTree {
     public:
-        ll NEUTRAL = 0; //no fx on qry
-        ll NO_OP = LLONG_MAX;  //label node as having no ops
-        ll DEF_OP = 0; //default op on each node during init
+        const ll NEUTRAL = inf; //no fx on qry
+        const ll NO_OP = inf;  //label node as having no ops
+        const ll DEF_VAL = 0; //default val on each node during init that has no build
         ll upd_op(ll a, ll b, ll k=1){ //plz ensure NO_OP has no fx on ops
-            if (b==NO_OP) return a;
-            return b*k;
-        }
-        ll qry_op(ll a, ll b){ 
+            if (a==NO_OP) return b; if (b==NO_OP) return a; //keep
             return a+b;
         }
-        void build(int x, int lx, int rx){ // build init val
-            if (lx==rx) val[x]=0;
+        ll qry_op(ll a, ll b){ 
+            return min(a,b);
+        }
+        void build(int x, int lx, int rx, const vector<int> &v){ // build init val
+            if (lx==rx) val[x]=lx-1<sz(v)?v[lx-1]:DEF_VAL;
             else {
                 int m = (lx+rx)/2;
-                build(2*x,lx,m);
-                build(2*x+1,m+1,rx);
+                build(2*x,lx,m,v);
+                build(2*x+1,m+1,rx,v);
                 val[x]=qry_op(val[2*x],val[2*x+1]);
             }
         }
@@ -89,10 +76,10 @@ class SegTree {
         vector<ll> val; //qry val of subtree
         SegTree(int n){
             sz = 1; while (sz < n) sz *= 2;
-            ops = vector<ll>(2*sz+1,DEF_OP);
+            ops = vector<ll>(2*sz+1,NO_OP);
             val = vector<ll>(2*sz+1,0);
-            build(1,1,sz);
         }
+        void build(const vector<int> &v = vector<int>()){for (int i=0;i<=2*sz;i++) ops[i]=NO_OP; build(1,1,sz,v);}
         void push_down(int x, int lx, int rx) { //maintain invariant top(new) - bot(old)
             if (lx==rx) return;
             ops[2*x]=upd_op(ops[2*x],ops[x]);
@@ -106,11 +93,11 @@ class SegTree {
             push_down(x,lx,rx);
             if (lx>r || rx<l) return; //seg out
             else if (l<=lx && rx<=r) { //seg full
-                ops[x]=upd_op(ops[x],v);
+                ops[x]=upd_op(ops[x],v); //can be sus: (NO_OP+v)
                 val[x]=upd_op(val[x],v,rx-lx+1);
             } else { //seg partial
                 int m = (lx+rx)/2;
-                update(l,r,v,2*x,lx,m); update(l,r,v,2*x+1,m+1,rx); 
+                update(l,r,v,2*x,lx,m); update(l,r,v,2*x+1,m+1,rx);
                 val[x]=qry_op(val[2*x],val[2*x+1]);
             }
         }
@@ -129,25 +116,54 @@ class SegTree {
 void __print(SegTree x) {vector<string> v; for (int i=1;i<=x.sz;i++) v.push_back(x.query(i,i)==x.NO_OP?"x":to_string(x.query(i,i))); __print(v);}
 
 
-int main() {
-    int N,M; cin >> N >> M;
-    SegTree segtree = SegTree(N);
-    for (int i=0;i<M;i++){
-        int type; cin >> type;
-        if (type == 1){
-            int l, r; cin >> l >> r; l++;
-            ll v; cin >> v;
-            dbg(l,r,v);
-            segtree.update(l,r,v);
-            dbg(segtree);
-        }
-        else {
-            int l, r; cin >> l >> r; l++;
-            dbg(l,r);
-            cout << segtree.query(l,r) << nl;
-        }
-    }
-    
 
+
+
+
+
+
+
+
+void solve(){
+    int N, K; cin >> N >> K; dbg(N,K);
+    vector<int> A(N+1); for (int i=1;i<=N;i++) cin >> A[i];dbg(A);
+    vector<int> last(N+1); 
+    vector<int> left(N+1);
+    for (int i=1;i<=N;i++) { 
+        left[i] = last[A[i]];
+        last[A[i]]=i;
+    }
+    dbg(left);
+
+    //dp
+    vector<vector<int>> dp(K+1, vector<int>(N+1));
+    //base
+    dp[1][1]=0; 
+    for (int i=2;i<=N;i++) {
+        dp[1][i]=dp[1][i-1];
+        if (left[i]!=0) dp[1][i]+=i-left[i]; 
+    }
+    dbg(dp[1]);
+    //trans
+    SegTree seg(N+1);
+    for (int k=2;k<=K;k++){
+        seg.build(dp[k-1]); 
+        for (int i=2;i<=N;i++){
+            //upd seg
+            if (left[i]!=0) seg.update(1,left[i]-1,i-left[i]);
+            //upd dp
+            dp[k][i] = seg.query(1,i-1);
+        }
+        dbg(dp[k]);
+    }
+    //ret
+    cout << dp[K][N] << nl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int T = 1; if (multi) cin >> T;
+    for(int i=0;i<T;i++) {dbgM(i+1);solve();}
     return 0;
 }
