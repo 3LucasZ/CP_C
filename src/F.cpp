@@ -52,7 +52,7 @@ const ll MOD = 1e9+7;
 class SegTree {
     public:
         const ll NEUTRAL = inf; //no fx on qry
-        const ll NO_OP = inf;  //label node as having no ops
+        const ll NO_OP = inf+1;  //label node as having no ops
         const ll DEF_VAL = 0; //default val on each node during init that has no build
         ll upd_op(ll a, ll b, ll k=1){ //plz ensure NO_OP has no fx on ops
             if (a==NO_OP) return b; if (b==NO_OP) return a; //keep
@@ -68,6 +68,7 @@ class SegTree {
                 build(2*x,lx,m,v);
                 build(2*x+1,m+1,rx,v);
                 val[x]=qry_op(val[2*x],val[2*x+1]);
+                ops[x]=NO_OP;
             }
         }
         //hidden------>
@@ -79,7 +80,7 @@ class SegTree {
             ops = vector<ll>(2*sz+1,NO_OP);
             val = vector<ll>(2*sz+1,0);
         }
-        void build(const vector<int> &v = vector<int>()){for (int i=0;i<=2*sz;i++) ops[i]=NO_OP; build(1,1,sz,v);}
+        void build(const vector<int> &v = vector<int>()){build(1,1,sz,v);}
         void push_down(int x, int lx, int rx) { //maintain invariant top(new) - bot(old)
             if (lx==rx) return;
             ops[2*x]=upd_op(ops[2*x],ops[x]);
