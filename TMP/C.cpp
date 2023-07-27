@@ -56,42 +56,27 @@ const bool multi = true;
 
 
 
-
+ll gcd(ll a, ll b){
+    if (b==0) return a;
+    return gcd(b,a%b);
+}
 
 void solve(){
-    int n, m; cin >> n >> m;
-    vector<char> s(n+2); for (int i=1;i<=n;i++) cin >> s[i];
-    dbg(n,m,s);
+    int N; cin >> N;
+    vector<int> A(N); for (int i=0;i<N;i++) cin >> A[i];
+    vector<int> B(N); for (int i=0;i<N;i++) cin >> B[i];
 
-    //dp
-    vector<int> L(n+2); L[0]=0;
-    for (int i=1;i<=n;i++){
-        if (s[i]=='0') L[i]=i;
-        else L[i]=L[i-1];
-    }
-    dbg(L);
-    vector<int> R(n+2); R[n+1]=n+1;
-    for (int i=n;i>=1;i--){
-        if (s[i]=='1') R[i]=i;
-        else R[i]=R[i+1];
-    }
-    dbg(R);
-    
-    //qry 
-    unordered_set<ll> mp;
-    for (int i=0;i<m;i++){
-        int l, r; cin >> l >> r;
-        dbg(i);
-        dbg(l,r);
-        l = R[l];
-        r = L[r];
-        dbg(l,r);
-        if (l>r) mp.insert(0);
-        else mp.insert(l*1000000LL+r);
+    unordered_set<int> pairs;
+    for (int i=0;i<N;i++){
+        if (A[i]==0&&B[i]==0) continue;
+        ll g = gcd(A[i],B[i]);
+        A[i]/=g;
+        B[i]/=g;
+        pairs.insert(2*(A[i]%2)+(B[i]%2));
     }
 
-    //ret
-    cout << sz(mp) << nl;
+    if (sz(pairs)<=1) cout << "YES" << nl;
+    else cout << "NO" << nl;
 }
 
 int main() {

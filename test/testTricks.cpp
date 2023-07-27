@@ -44,7 +44,6 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-const bool multi = false;
 
 
 
@@ -56,30 +55,34 @@ const bool multi = false;
 
 
 
-ll MOD;
-
-void solve(){
-    ll x, q; cin >> x >> q >> MOD;
-
-
-}
-
-vector<bool> isPrime;
-vector<ll> primes;
-void sieveLEQ(int n){
-    isPrime = vector<bool>(n+1,true); isPrime[1]=false;
-    for (int p=2;p*p<=n;p++) if (isPrime[p]) for (int i=p*p;i<=n;i+=p) isPrime[i]=false;
-    for (int p=2;p<=n;p++) if (isPrime[p]) primes.push_back(p);
-}
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int T = 1; if (multi) cin >> T;
+    auto x = {5,4}; // "initializer list"
 
+    auto p1 = pair(6,'3'); dbg(p1); // auto OP
+    auto p2 = make_pair("good morning",9); dbg(p2); // before pair() was introduced
+    pair<int,int> p3 = {5,4}; dbg(p3); // {} trick
 
-    sieveLEQ(1e5);
+    auto t1 = tuple(1,22.0,"yay");  //extend to tuples!
+    auto t2 = tuple(1,2.9,"hi");
+    tuple<int,ld,string> t3 = {6,0.2,"hi"};
 
+    int a;
+    ld b;
+    string c;
+    tie(a,b,c) = t3; //tie
+    dbg(a,b,c);
+    int u1 = 1;
+    int u2 = 2;
+    int u3 = 3;
+    dbg(u1,u2,u3);
+    tie(u1,u2,u3) = tuple(u1+u2,u2+u3,u1+u3);
+    dbg(u1,u2,u3);
 
-    for(int i=0;i<T;i++) {dbgM(i+1);solve();}
+    //emplace back
+    vector<pair<int,int>> v;
+    v.emplace_back(3,4);
+    v.push_back(pair(5,5));
+    dbg(v);
+
     return 0;
 }

@@ -59,39 +59,34 @@ const bool multi = true;
 
 
 void solve(){
-    int n, m; cin >> n >> m;
-    vector<char> s(n+2); for (int i=1;i<=n;i++) cin >> s[i];
-    dbg(n,m,s);
+    ll s; ll k; cin >> s >> k;
+    ll best = s*k;
+    dbg(s,k);
 
-    //dp
-    vector<int> L(n+2); L[0]=0;
-    for (int i=1;i<=n;i++){
-        if (s[i]=='0') L[i]=i;
-        else L[i]=L[i-1];
-    }
-    dbg(L);
-    vector<int> R(n+2); R[n+1]=n+1;
-    for (int i=n;i>=1;i--){
-        if (s[i]=='1') R[i]=i;
-        else R[i]=R[i+1];
-    }
-    dbg(R);
-    
-    //qry 
-    unordered_set<ll> mp;
-    for (int i=0;i<m;i++){
-        int l, r; cin >> l >> r;
-        dbg(i);
-        dbg(l,r);
-        l = R[l];
-        r = L[r];
-        dbg(l,r);
-        if (l>r) mp.insert(0);
-        else mp.insert(l*1000000LL+r);
+    if (s%10==0||s%10==5){
+        s+=s%10;k--;
+        ckmax(best,s*k);
+        cout << best << nl;
+        return;
     }
 
-    //ret
-    cout << sz(mp) << nl;
+    while (s%10!=6){
+        s+=s%10;k--;
+        ckmax(best,s*k);
+        dbg(s,k);
+    }
+
+    dbg("hop");
+    ll x = max(2LL,(5*k-s)/40); x-=2;
+    s+=20*x;k-=4*x;
+    dbg(s,k);
+    for (int i=0;i<20;i++){
+        s+=s%10;k--;
+        ckmax(best,s*k);
+    }
+
+    cout << best << nl;
+
 }
 
 int main() {

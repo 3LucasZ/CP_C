@@ -44,7 +44,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-const bool multi = true;
+const bool multi = false;
 
 
 
@@ -56,48 +56,85 @@ const bool multi = true;
 
 
 
-
-
-void solve(){
-    int n, m; cin >> n >> m;
-    vector<char> s(n+2); for (int i=1;i<=n;i++) cin >> s[i];
-    dbg(n,m,s);
-
-    //dp
-    vector<int> L(n+2); L[0]=0;
-    for (int i=1;i<=n;i++){
-        if (s[i]=='0') L[i]=i;
-        else L[i]=L[i-1];
+vector<bool> isPrime;
+vector<ll> primes;
+ll MOD;
+vector<ll> primeFactorize(ll val){
+    vector<ll> ret;
+    for (int pi=0;primes[pi]*primes[pi]<=val;pi++){
+        ll p = primes[pi];
+        while (val%p==0){
+            ret.push_back(p);
+            val/=p;
+        }
     }
-    dbg(L);
-    vector<int> R(n+2); R[n+1]=n+1;
-    for (int i=n;i>=1;i--){
-        if (s[i]=='1') R[i]=i;
-        else R[i]=R[i+1];
-    }
-    dbg(R);
-    
-    //qry 
-    unordered_set<ll> mp;
-    for (int i=0;i<m;i++){
-        int l, r; cin >> l >> r;
-        dbg(i);
-        dbg(l,r);
-        l = R[l];
-        r = L[r];
-        dbg(l,r);
-        if (l>r) mp.insert(0);
-        else mp.insert(l*1000000LL+r);
-    }
-
-    //ret
-    cout << sz(mp) << nl;
+    if (val>1) ret.push_back(val);
+    return ret;
+}
+ll po(ll a,ll b){
+    if (b==0) return 1;
+    else if (b%2==0) return po(a*a%MOD,b/2);
+    else return a*po(a,b-1)%MOD;
 }
 
+void solve(){
+    ll x, q; cin >> x >> q >> MOD; dbg(x,q,MOD);
+    unordered_map<ll,int> pCnt;
+    vector<ll> init = primeFactorize(x);
+    ll ans = 1;
+    ll weird = 0;
+    for (ll p : init) {
+        if (p==2) continue;
+        pCnt[p]++;
+        if ((pCnt[p]+1)%MOD==0){
+            weird++;
+        } else {
+            ans = ans*(pCnt[p]+1)%MOD;
+        }
+        if ((pCnt[p])%MOD==0){
+            weird--;
+        } else {
+            ans = ans*po(pCnt[p],MOD-2)%MOD;
+        }
+    }
+    dbg(ans);
+    for (int i=0;i<q;i++){
+        cin >> x; dbg(x);
+        init = primeFactorize(x); dbg(init);
+        for (ll p : init) {
+            if (p==2) continue;
+        pCnt[p]++;
+        if ((pCnt[p]+1)%MOD==0){
+            weird++;
+        } else {
+            ans = ans*(pCnt[p]+1)%MOD;
+        }
+        if ((pCnt[p])%MOD==0){
+            weird--;
+        } else {
+            ans = ans*po(pCnt[p],MOD-2)%MOD;
+        }
+        }
+        if (weird!=0) cout << 0 << nl;
+        else cout << ans << nl;
+    }
+}
+
+
+void sieveLEQ(int n){
+    isPrime = vector<bool>(n+1,true); isPrime[1]=false;
+    for (int p=2;p*p<=n;p++) if (isPrime[p]) for (int i=p*p;i<=n;i+=p) isPrime[i]=false;
+    for (int p=2;p<=n;p++) if (isPrime[p]) primes.push_back(p);
+}
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     int T = 1; if (multi) cin >> T;
+
+
+    sieveLEQ(1e5);
+
+
     for(int i=0;i<T;i++) {dbgM(i+1);solve();}
     return 0;
 }

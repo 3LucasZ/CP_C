@@ -59,35 +59,22 @@ const bool multi = true;
 
 
 void solve(){
-    int N, K; cin >> N >> K;
-    vector<int> A(N+2); for (int i=1;i<=N;i++) cin >> A[i];
-    dbg(N,K,A);
-
-    vector<vector<int>> B(N+1); 
-    for (int i=1;i<=N;i++) B[i].push_back(0);
-    for (int i=1;i<=N;i++){
-        B[A[i]].push_back(i);
+    int n; int k; cin >> n >> k;
+    vector<pair<int,int>> A(n); 
+    for (int i=0;i<n;i++){
+        cin >> A[i].first; 
+        A[i].first%=k;
+        if (A[i].first==0) A[i].first=k;
+        A[i].second=-i;
     }
-    for (int i=1;i<=N;i++) {B[i].push_back(N+1);B[i].push_back(N+2);}
-    dbg(B);
+    sort(all(A));
+    reverse(all(A));
+    dbg(A);
 
-    vector<vector<int>> gap(N+1);
-    for (int i=1;i<=N;i++){
-        for (int j=1;j<sz(B[i]);j++){
-            gap[i].push_back(B[i][j]-B[i][j-1]);
-        }
+    for (int i=0;i<n;i++){
+        cout << -A[i].second+1 << " ";
     }
-    dbg(gap);
-
-    for (int i=1;i<=N;i++) sort(all(gap[i]),greater<int>());
-    dbg(gap);
-
-    int ans = inf;
-    for (int i=1;i<=N;i++){
-        ckmin(ans, max((gap[i][0]-1)/2,gap[i][1]-1));
-    }
-
-    cout << ans << nl;
+    cout << nl;
 }
 
 int main() {

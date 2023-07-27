@@ -59,39 +59,35 @@ const bool multi = true;
 
 
 void solve(){
-    int n, m; cin >> n >> m;
-    vector<char> s(n+2); for (int i=1;i<=n;i++) cin >> s[i];
-    dbg(n,m,s);
+    int N, K; cin >> N >> K;
+    vector<int> A(N+2); for (int i=1;i<=N;i++) cin >> A[i];
+    dbg(N,K,A);
 
-    //dp
-    vector<int> L(n+2); L[0]=0;
-    for (int i=1;i<=n;i++){
-        if (s[i]=='0') L[i]=i;
-        else L[i]=L[i-1];
+    vector<vector<int>> B(N+1); 
+    for (int i=1;i<=N;i++) B[i].push_back(0);
+    for (int i=1;i<=N;i++){
+        B[A[i]].push_back(i);
     }
-    dbg(L);
-    vector<int> R(n+2); R[n+1]=n+1;
-    for (int i=n;i>=1;i--){
-        if (s[i]=='1') R[i]=i;
-        else R[i]=R[i+1];
+    for (int i=1;i<=N;i++) {B[i].push_back(N+1);B[i].push_back(N+2);}
+    dbg(B);
+
+    vector<vector<int>> gap(N+1);
+    for (int i=1;i<=N;i++){
+        for (int j=1;j<sz(B[i]);j++){
+            gap[i].push_back(B[i][j]-B[i][j-1]);
+        }
     }
-    dbg(R);
-    
-    //qry 
-    unordered_set<ll> mp;
-    for (int i=0;i<m;i++){
-        int l, r; cin >> l >> r;
-        dbg(i);
-        dbg(l,r);
-        l = R[l];
-        r = L[r];
-        dbg(l,r);
-        if (l>r) mp.insert(0);
-        else mp.insert(l*1000000LL+r);
+    dbg(gap);
+
+    for (int i=1;i<=N;i++) sort(all(gap[i]),greater<int>());
+    dbg(gap);
+
+    int ans = inf;
+    for (int i=1;i<=N;i++){
+        ckmin(ans, max((gap[i][0]-1)/2,gap[i][1]-1));
     }
 
-    //ret
-    cout << sz(mp) << nl;
+    cout << ans << nl;
 }
 
 int main() {

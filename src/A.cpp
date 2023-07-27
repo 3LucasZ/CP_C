@@ -59,21 +59,8 @@ const bool multi = true;
 
 
 void solve(){
-    int R, C, K; cin >> R >> C >> K;
-    int r1, r2; cin >> r1 >> r2;
-
-    bool caught = false;
-    for (int i=0;i<K;i++){
-        int u, v; cin >> u >> v;
-        if ((abs(u-r1)+abs(v-r2))%2==0) caught = true;
-    }
-
-    if (caught){
-        cout << "NO" << nl;
-    }
-    else {
-        cout << "YES" << nl;
-    }
+    int b, c, h; cin >> b >> c >> h;
+    cout << 2*min(b-1,c+h)+1 << nl;
 }
 
 int main() {

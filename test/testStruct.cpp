@@ -34,7 +34,6 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-const bool multi = true;
 
 
 
@@ -49,19 +48,18 @@ const bool multi = true;
 struct Query {
     int u, v, k;
 };
+void __print(Query x) {cerr << '{'; __print(x.u); cerr << ", "; __print(x.v); cerr << ", "; __print(x.k); cerr << '}';}
 
 void solve(){
-    //Query q = Query(1,2,3);
-    Query q = Query();
-    q.u=1;
-    q.v=2;
-    q.k=3;
+    Query q;
+    dbg(q);
+    q.u=1; q.v=2; q.k=3;
+    dbg(q);
+    q = {4,5,6};
+    dbg(q);
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int T = 1; if (multi) cin >> T;
-    for(int i=0;i<T;i++) {dbgM(i+1);solve();}
+    solve();
     return 0;
 }

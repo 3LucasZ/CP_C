@@ -44,7 +44,7 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-const bool multi = true;
+const bool multi = false;
 
 
 
@@ -59,34 +59,16 @@ const bool multi = true;
 
 
 void solve(){
-    ll s; ll k; cin >> s >> k;
-    ll best = s*k;
-    dbg(s,k);
+    int n; cin >> n;
+    vector<int> A(n+1); for (int i=1;i<=n;i++) cin >> A[i];
+    dbg(n,A);
 
-    if (s%10==0||s%10==5){
-        s+=s%10;k--;
-        ckmax(best,s*k);
-        cout << best << nl;
-        return;
+    vector<int> L0(n+1); for (int i=1;i<=n;i++){
+        if (A[i-1]==0) L0[i]=i-1;
+        else L0[i]=L0[i-1];
     }
-
-    while (s%10!=6){
-        s+=s%10;k--;
-        ckmax(best,s*k);
-        dbg(s,k);
-    }
-
-    dbg("hop");
-    ll x = max(2LL,(5*k-s)/40); x-=2;
-    s+=20*x;k-=4*x;
-    dbg(s,k);
-    for (int i=0;i<20;i++){
-        s+=s%10;k--;
-        ckmax(best,s*k);
-    }
-
-    cout << best << nl;
-
+    dbg(L0);
+    dbg(L1);
 }
 
 int main() {
