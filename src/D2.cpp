@@ -64,6 +64,9 @@ void solve(){
     dbg(n,A);
 
     vector<bool> vis(n+1);
+    // for (int i=1;i<=n;i++){
+    //     cout << vis[i] << " ";
+    // }cout << nl;
     int ans = 0;
     for (int i=1;i<=n;i++){
         if (A[i]==2 && !vis[i]){
@@ -71,17 +74,31 @@ void solve(){
             vis[i]=true;
             for (int j=i+1;j<=n&&!vis[j];j++){
                 vis[j]=true;
+                if (A[j]==0) break;
             }
             for (int j=i-1;j>=1&&!vis[j];j--){
                 vis[j]=true;
+                if (A[j]==0) break;
             }
         }
     }
-    dbg(vis);
-    
+    // for (int i=1;i<=n;i++){
+    //     cout << vis[i] << " ";
+    // }cout << nl;
+
+    int l; vis[0]=true;vis[n+1]=true;
     for (int i=1;i<=n;i++){
-        if (!vis[i]&&A[i]==0){
-            ans++;
+        if (!vis[i]&&vis[i-1])l=i;
+        if (!vis[i]&&vis[i+1]){
+            dbg(l,i);
+            int zeros = 0;
+            int oneGroups = 0;
+            for (int j=l;j<=i;j++){
+                if (A[j]==0) zeros++;
+                if (A[j]==1 && (j==l || A[j-1]==0)) oneGroups++;
+            }
+            dbg(max(oneGroups,zeros));
+            ans+=max(oneGroups,zeros);
         }
     }
 
