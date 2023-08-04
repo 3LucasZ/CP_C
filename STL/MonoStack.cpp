@@ -44,71 +44,38 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define dbgM(x)
 #endif
 
-const bool multi = false;
-
-
-
-
-
-
-
-
-
-
-
-
-
-void solve(){
-    int n; cin >> n;
-    vector<int> A(n+1); for (int i=1;i<=n;i++) cin >> A[i];
-    dbg(n,A);
-
-    vector<bool> vis(n+1);
-    // for (int i=1;i<=n;i++){
-    //     cout << vis[i] << " ";
-    // }cout << nl;
-    int ans = 0;
-    for (int i=1;i<=n;i++){
-        if (A[i]==2 && !vis[i]){
-            ans++;
-            vis[i]=true;
-            for (int j=i+1;j<=n&&!vis[j];j++){
-                vis[j]=true;
-                if (A[j]==0) break;
-            }
-            for (int j=i-1;j>=1&&!vis[j];j--){
-                vis[j]=true;
-                if (A[j]==0) break;
-            }
+/*
+You have to edit to specify:
+is a<=b okay or is it strictly a<b?
+1-indexing (default 0) or 0-indexing (default -1)?
+*/
+template<typename T>
+vector<int> nxt(vector<T> v, function<bool (T, T)> cmp, bool left=true){
+    stack<T> s; vector<int> ret(sz(v));
+    if (left) for (int i=0;i<sz(v);i++){ //1a
+            while (!s.empty() && cmp(v[i],v[s.top()]))s.pop();
+            if (!s.empty()) ret[i]=s.top();
+            else ret[i]=-1; //2a
+            s.push(i);
         }
-    }
-    // for (int i=1;i<=n;i++){
-    //     cout << vis[i] << " ";
-    // }cout << nl;
-
-    int l; vis[0]=true;vis[n+1]=true;
-    for (int i=1;i<=n;i++){
-        if (!vis[i]&&vis[i-1])l=i;
-        if (!vis[i]&&vis[i+1]){
-            dbg(l,i);
-            int zeros = 0;
-            int oneGroups = 0;
-            for (int j=l;j<=i;j++){
-                if (A[j]==0) zeros++;
-                if (A[j]==1 && (j==l || A[j-1]==0)) oneGroups++;
-            }
-            dbg(max(oneGroups,zeros));
-            ans+=max(oneGroups,zeros);
+    else for (int i=sz(v)-1;i>=0;i--){ //1b
+            while (!s.empty() && cmp(v[i],v[s.top()]))s.pop();
+            if (!s.empty()) ret[i]=s.top();
+            else ret[i]=sz(v); //2b
+            s.push(i);
         }
-    }
-
-    cout << ans << nl;
+    return ret;
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int T = 1; if (multi) cin >> T;
-    for(int i=0;i<T;i++) {dbgM(i+1);solve();}
+    vector<int> A = {9,3,2,5,4,1,7,7,5,9,3,4,6,2};
+    dbg(A, sz(A));
+    vector<int> res;
+    res = nxt<int>(A, greater<int>());
+    dbg(res);
+    res = nxt<int>(A, greater<int>(),false);
+    dbg(res);
+    res = nxt<int>(A, less<int>());
+    dbg(res);
     return 0;
 }
