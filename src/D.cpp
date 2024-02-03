@@ -61,7 +61,7 @@ vector<int> vis;
 vector<int> a;
 
 bool ok(int i, int j){
-    return i>-1 && j<n && (a[j]-a[i]==1 || a[i]-a[j]==1);
+    return i>-1 && j<n && vis[i]==0 && vis[j]==0 && (a[j]-a[i]==1 || a[i]-a[j]==1);
 }
 
 void solve(){
@@ -91,15 +91,15 @@ void solve(){
 
     while (!pq.empty()) {
         dbg(pq.top());
-        auto x = pq.top(); pq.pop();
-        vis[x.second] = 1;
-        if (l[x.second] > -1) r[l[x.second]] = r[x.second];
-        if (r[x.second] < n) l[r[x.second]] = l[x.second];
-        if (ok(l[x.second], r[x.second])) {
-            if (l[x.second]>r[x.second]){
-                pq.push({a[l[x.second]],l[x.second]});
+        int x = pq.top().second; pq.pop();
+        vis[x] = 1;
+        if (l[x] > -1) r[l[x]] = r[x];
+        if (r[x] < n) l[r[x]] = l[x];
+        if (ok(l[x], r[x])) {
+            if (l[x]>r[x]){
+                pq.push({a[l[x]],l[x]});
             } else {
-                pq.push({a[r[x.second]],r[x.second]});
+                pq.push({a[r[x]],r[x]});
             }
         }
     }
