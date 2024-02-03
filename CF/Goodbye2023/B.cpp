@@ -38,10 +38,10 @@ template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 #ifdef DEBUG
 #define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
-#define dbgM(x) cout << "\e[34m" << "CASE: " << x << "\e[34m" << endl;
+#define dbgM(x) cout << "CASE: " << x << endl;
 #else
 #define dbg(x...)
-#define dbgM(x) 
+#define dbgM(x)
 #endif
 
 const bool multi = true;
@@ -52,13 +52,23 @@ const bool multi = true;
 
 
 
-
+ll gcd(ll a, ll b){
+    if (b==0) return a;
+    return gcd(b,a%b);
+}
 
 
 
 
 
 void solve(){
+    ll a, b; cin >> a >> b;
+    ll f = gcd(a,b);
+    ll aa = a/f;
+    ll bb = b/f;
+    if (aa==1) cout << bb*b << nl;
+    else cout << aa*b << nl;
+
 }
 
 int main() {

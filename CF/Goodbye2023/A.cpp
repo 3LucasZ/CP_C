@@ -38,10 +38,10 @@ template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 #ifdef DEBUG
 #define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
-#define dbgM(x) cout << "\e[34m" << "CASE: " << x << "\e[34m" << endl;
+#define dbgM(x) cout << "CASE: " << x << endl;
 #else
 #define dbg(x...)
-#define dbgM(x) 
+#define dbgM(x)
 #endif
 
 const bool multi = true;
@@ -59,6 +59,22 @@ const bool multi = true;
 
 
 void solve(){
+    int n, k; cin >> n >> k;
+    ll p = 1;
+    for (int i=0;i<n;i++) {
+        int b; cin >> b;
+        p*=b;
+    }
+    if (2023 % p == 0){
+        cout << "YES" << nl;
+        cout << 2023 / p;
+        for (int i=0;i<k-1;i++){
+            cout << " 1";
+        }
+        cout << nl;
+    } else {
+        cout << "NO" << nl;
+    }
 }
 
 int main() {

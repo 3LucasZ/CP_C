@@ -38,10 +38,10 @@ template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 #ifdef DEBUG
 #define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
-#define dbgM(x) cout << "\e[34m" << "CASE: " << x << "\e[34m" << endl;
+#define dbgM(x) cout << "CASE: " << x << endl;
 #else
 #define dbg(x...)
-#define dbgM(x) 
+#define dbgM(x)
 #endif
 
 const bool multi = true;
@@ -52,19 +52,32 @@ const bool multi = true;
 
 
 
+int qry (int l, int r){
+    cout << "? " << l << " " << r << endl;
+    int x; cin >> x; return x;
+}
 
 
+int solve(int l, int r){
+    if (r-l+1==1) return l;
+    int m = (l+r)/2;
+    int u = solve(l,m);
+    int v = solve(m+1,r);
+    int a = qry(u,v);
+    int b = u==v-1?0:qry(u,v-1);
+    if (a==b) return v;
+    else return u;
+}
 
 
-
-
-void solve(){
+void main2(){
+    int N; cin >> N;
+    int ans = solve(1,N);
+    cout << "! " << ans << endl;
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
     int T = 1; if (multi) cin >> T;
-    for(int i=0;i<T;i++) {dbgM(i+1);solve();}
+    for(int i=0;i<T;i++) {dbgM(i+1);main2();}
     return 0;
 }
