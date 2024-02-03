@@ -38,10 +38,10 @@ template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 #ifdef DEBUG
 #define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
-#define dbgM(x) cout << "CASE: " << x << endl;
+#define dbgM(x) cout << "\e[34m" << "CASE: " << x << "\e[34m" << endl ;
 #else
 #define dbg(x...)
-#define dbgM(x)
+#define dbgM(x) 
 #endif
 
 const bool multi = true;
@@ -52,32 +52,73 @@ const bool multi = true;
 
 
 
-int qry (int l, int r){
-    cout << "? " << l << " " << r << endl;
-    int x; cin >> x; return x;
+
+
+int n;
+vector<int> l;
+vector<int> r;
+vector<int> vis;
+vector<int> a;
+
+bool ok(int i, int j){
+    return i>-1 && j<n && (a[j]-a[i]==1 || a[i]-a[j]==1);
 }
 
+void solve(){
+    cin >> n;
+    l.clear(); l.resize(n);
+    r.clear(); r.resize(n);
+    vis.clear(); vis.resize(n);
+    a.clear(); a.resize(n);
+    dbg(n);
 
-int solve(int l, int r){
-    if (r-l+1==1) return l;
-    int m = (l+r)/2;
-    int u = solve(l,m);
-    int v = solve(m+1,r);
-    int a = qry(u,v);
-    int b = u==v-1?0:qry(u,v-1);
-    if (a==b) return v;
-    else return u;
-}
+    priority_queue<pair<int,int>> pq; //value, index
 
+    for (int i=0;i<n;i++){
+        cin >> a[i];
+        l[i] = i-1;
+        r[i] = i+1;
+        vis[i] = 0;
+        if (ok(l[i],i)){
+            if (a[i]>a[l[i]]){
+                pq.push({a[i],i});
+            } else {
+                pq.push({a[l[i]],l[i]});
+            }
+        }
+    }
+    dbg(a);
 
-void main2(){
-    int N; cin >> N;
-    int ans = solve(1,N);
-    cout << "! " << ans << endl;
+    while (!pq.empty()) {
+        dbg(pq.top());
+        auto x = pq.top(); pq.pop();
+        vis[x.second] = 1;
+        if (l[x.second] > -1) r[l[x.second]] = r[x.second];
+        if (r[x.second] < n) l[r[x.second]] = l[x.second];
+        if (ok(l[x.second], r[x.second])) {
+            if (l[x.second]>r[x.second]){
+                pq.push({a[l[x.second]],l[x.second]});
+            } else {
+                pq.push({a[r[x.second]],r[x.second]});
+            }
+        }
+    }
+    dbg(vis);
+
+    int left = 0;
+    int lastLeft = 0;
+    for (int i=0;i<n;i++) if (vis[i]==0) {
+        left++;
+        lastLeft = i;
+    }
+    if (left == 1 && a[lastLeft] == 0) cout << "YES" << nl;
+    else cout << "NO" << nl;
 }
 
 int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     int T = 1; if (multi) cin >> T;
-    for(int i=0;i<T;i++) {dbgM(i+1);main2();}
+    for(int i=0;i<T;i++) {dbgM(i+1);solve();}
     return 0;
 }
