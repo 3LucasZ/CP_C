@@ -38,7 +38,7 @@ template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 #ifdef DEBUG
 #define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
-#define dbgM(x) cout << "\e[34m" << "CASE: " << x << "\e[34m" << endl ;
+#define dbgM(x) cerr << "\e[34m" << "CASE: " << x << "\e[39m" << endl;
 #else
 #define dbg(x...)
 #define dbgM(x) 
@@ -54,65 +54,42 @@ const bool multi = true;
 
 
 
-int n;
-vector<int> l;
-vector<int> r;
-vector<int> vis;
-vector<int> a;
 
-bool ok(int i, int j){
-    return i>-1 && j<n && vis[i]==0 && vis[j]==0 && (a[j]-a[i]==1 || a[i]-a[j]==1);
-}
+
+
 
 void solve(){
-    cin >> n;
-    l.clear(); l.resize(n);
-    r.clear(); r.resize(n);
-    vis.clear(); vis.resize(n);
-    a.clear(); a.resize(n);
-    dbg(n);
+    int r, c, ra, ca, rb, cb;
+    cin >> r >> c >> ra >> ca >> rb >> cb;
 
-    priority_queue<pair<int,int>> pq; //value, index
+    int d = rb - ra;
+    if (d<0){
+        cout << "Draw" << nl;
+        return;
+    }
 
-    for (int i=0;i<n;i++){
-        cin >> a[i];
-        l[i] = i-1;
-        r[i] = i+1;
-        vis[i] = 0;
-        if (ok(l[i],i)){
-            if (a[i]>a[l[i]]){
-                pq.push({a[i],i});
-            } else {
-                pq.push({a[l[i]],l[i]});
-            }
+    int n = d/2;
+    if (d%2==0){ //B/tie
+        if (ca<cb){
+            ca = max(ca-n,1);
+            cb = max(cb-n,1);
+        } else {
+            ca = min(ca+n,c);
+            cb = min(cb+n,c);   
         }
-    }
-    dbg(a);
-
-    while (!pq.empty()) {
-        dbg(pq.top());
-        int x = pq.top().second; pq.pop();
-        vis[x] = 1;
-        if (l[x] > -1) r[l[x]] = r[x];
-        if (r[x] < n) l[r[x]] = l[x];
-        if (ok(l[x], r[x])) {
-            if (l[x]>r[x]){
-                pq.push({a[l[x]],l[x]});
-            } else {
-                pq.push({a[r[x]],r[x]});
-            }
+        if (ca==cb) cout << "Bob" << nl;
+            else cout << "Draw" << nl;
+    } else { //A/tie
+        if (cb<ca){
+            ca = max(ca-n-1,1);
+            cb = max(cb-n,1);
+        } else if (cb>ca) {
+            ca = min(ca+n+1,c);
+            cb = min(cb+n,c);   
         }
+        if (ca==cb) cout << "Alice" << nl;
+            else cout << "Draw" << nl;
     }
-    dbg(vis);
-
-    int left = 0;
-    int lastLeft = 0;
-    for (int i=0;i<n;i++) if (vis[i]==0) {
-        left++;
-        lastLeft = i;
-    }
-    if (left == 1 && a[lastLeft] == 0) cout << "YES" << nl;
-    else cout << "NO" << nl;
 }
 
 int main() {
