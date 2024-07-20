@@ -94,5 +94,8 @@
     // "cpp": "g++-11 -std=c++17 -stdlib=libc++ -O2 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_ASSERTIONS -DDEBUG -ggdb3 -fsanitize=address,undefined -g -fno-sanitize-recover -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt"
     // -ferror-limit=2
     "cpp": "g++-11 -DDEBUG -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt"
+  },
+  "files.exclude": {
+    "build": true
   }
 }
