@@ -70,12 +70,12 @@ void solve(){
     vector<vector<bool>> cluster_group(n+1, vector<bool>(n+1));
     vector<vector<bool>> cluster(n+1, vector<bool>(n+1));
     for (int l=n-1;l>=1;l--){
-        cluster[l][l+1]=true;
+        cluster[l][l+1]=l-a[l]>=0 and (l-a[l])%2==0;
         cluster_group[l][l-1]=true;
         for (int r=l+1;r<=n;r+=2){
-            cluster[l][r] = cluster[l][r] or cluster_group[l+1][r-1];
+            cluster[l][r] = cluster[l][r] or (l-a[l]>=0 and (l-a[l])%2==0 and cluster_group[l+1][r-1]);
             for (int k=l;k<=r-1;k+=2){
-                bool ok = cluster_group[l][k-1] and cluster[k][r] and a[k]>=a[l-1]+1;
+                bool ok = cluster_group[l][k-1] and cluster[k][r] and a[k]>=a[l-1]+1 and k-a[k]>=0 and (k-a[k])%2==0;
                 cluster_group[l][r] = cluster_group[l][r] or ok;
             }
         }
