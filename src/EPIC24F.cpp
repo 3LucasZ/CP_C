@@ -64,31 +64,60 @@ void solve(){
     for (int i=1;i<=n;i++){
         cin >> a[i];
     }
-    dbg(n,a);
+    // dbg(n,a);
 
-    vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(n+1, vector<int>(n+1, -10*n)));
-    dp[0][0][0]=0;
-    for (int i=0;i<=n-1;i++){
-        for (int active=0;active<=n-1;active++){
-            for (int delay=0;delay<=n-2;delay++){
-                // dbg(i,active,delay);
-                if (i+1-a[i+1] <= delay and i+1-a[i+1] >=0){
-                    ckmax(dp[i+1][active+1][delay],dp[i][active][delay]+1);
+    //precomp
+    vector<vector<vector<bool>>> ok(n+1, vector<vector<bool>>(n+1, vector<bool>(n+1, false)));
+    for (int l=n;l>=1;l--){
+        for (int r=l+1;r<=n;r+=2){
+            for (int delay=0;delay<=n;delay++){
+                //Case 1:
+                for (int k=l+1;k<=r-1;k++){
+                    ok[l][r][delay] = ok[l][r][delay] or (ok[l][k][delay] and ok[k+1][r][delay+k+1-l]);
                 }
-                if (active > 0){
-                    ckmax(dp[i+1][active-1][delay+2],dp[i][active][delay]);
-                }
-                if (active == 0){
-                    ckmax(dp[i+1][active][delay],dp[i][active][delay]);
+                //Case 2:
+                ok[l][r][delay] = ok[l][r][delay] or ((l+1>=r-1 or ok[l+1][r-1][delay]) and (l-a[l]>=0 and l-a[l]==delay and (l-a[l])%2==0));
+                //Case 3:
+                if (delay > 0){
+                    ok[l][r][delay] = ok[l][r][delay] or ok[l][r][delay-1];
                 }
             }
         }
     }
-    int ret = 0;
-    for (int delay=0;delay<=n;delay++){
-        ckmax(ret, dp[n][0][delay]);
+    //dbg
+    // for (int l=1;l<=n;l++){
+    //     for (int r=1;r<=n;r++){
+    //         for (int delay=0;delay<=n;delay++){
+    //             if (ok[l][r][delay]){
+    //                 dbg(l,r,delay);
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
+    // dbg('precomp');
+    //dp
+    vector<vector<bool>> dp(2*n+1, vector<bool>(2*n+1, false));
+    dp[0][0] = true;
+    for (int i=0;i<n;i++){
+        for (int delay=0;delay<=n;delay++){
+            //Case 1:
+            dp[i+1][delay] = dp[i+1][delay] or dp[i][delay];
+            //Case 2:
+            for (int k=2;i+k<=n;k+=2){
+                dp[i+k][delay+k] = dp[i+k][delay+k] or (dp[i][delay] and ok[i+1][i+k][delay]);
+            }
+        }
     }
-    cout << ret << nl;
+
+    //ret
+    int best = 0;
+    for (int delay=0;delay<=n;delay++){
+        if (dp[n][delay]){
+            best = delay;
+        }
+    }
+    cout << best/2 << nl;
 }
 
 int main() {
