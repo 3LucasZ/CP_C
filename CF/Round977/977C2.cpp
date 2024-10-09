@@ -78,16 +78,16 @@ void solve(){
     }
 
     playerSlides.clear(); playerSlides.resize(n+1); // slides that player i has to present
-    for (int i=1;i<=n;i++){ //initialize, so that every player presents fake 100 + mth slide
+    for (int i=1;i<=n;i++){ //initialize, so that every player presents fake INFINITY-th slide
         playerSlides[i].insert(m+100);
     }
-    for (int i=0;i<m;i++){
+    for (int i=1;i<=m;i++){
         playerSlides[slideshow[i]].insert(i);
     }
     set<int> bad; // players that are breaking the law
-    for (int i=1;i<=n;i++){ // loop over players
-        if (position[i] < n && isBad(i)){
-            bad.insert(i);
+    for (int i=1;i<n;i++){ // loop over positions
+        if (isBad(player[i])){
+            bad.insert(player[i]);
         }
     }
     
@@ -100,22 +100,19 @@ void solve(){
     for (int i=0;i<q;i++){
         int s, t; cin >> s >> t; // slideshow index, change to new player
 
+        vector<int> checkChanged = {slideshow[s], player[position[slideshow[s]]-1], t, player[position[t]-1]};
+
         playerSlides[slideshow[s]].erase(s);
         playerSlides[t].insert(s);
         slideshow[s]=t;
 
-        if (position[t] < n && bad.count(t) && !isBad(t)) {
-            bad.erase(t);
-        }
-        if (position[t] > 1 && bad.count(player[position[t]-1]) && !isBad(player[position[t]-1])) {
-            bad.erase(player[position[t]-1]);
-        }
-
-        if (position[t] < n && !bad.count(t) && isBad(t)) {
-            bad.insert(t);
-        }
-        if (position[t] > 1 && !bad.count(player[position[t]-1]) && isBad(player[position[t]-1])) {
-            bad.insert(player[position[t]-1]);
+        for (int x : checkChanged) {
+            if (position[x] < n && bad.count(x) && !isBad(x)) {
+                bad.erase(x);
+            }
+            if (position[x] < n && !bad.count(x) && isBad(x)) {
+                bad.insert(x);
+            }
         }
 
         dbg(slideshow);

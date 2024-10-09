@@ -92,26 +92,26 @@ int D = 10;
 
 
 
-
+int N, M;
+vector<vector<int>> r;
 
 void solve(){
-    int N, M; cin >> N >> M;
-    vector<vector<vector<int>>> presum(D+1,vector<vector<int>>(D+1, vector<int>(2*N+2)));
+    cin >> N >> M;
+    r.clear(); r.resize(D+1, vector<int>(N+1));
     for (int q=0;q<M;q++){
-        int a, d, k; cin >> a >> d >> k;
-        if (k > 0){
-            presum[d][a%d][a] += 1;
-            presum[d][a%d][a+k*d+k] -= 1;
-        }
+        int a0, d, k; cin >> a0 >> d >> k;
+        int a = a0 + k*d;
+        r[d][a0] = max(r[d][a0], a);
     }
 
     DSU dsu(N);
     for (int d=1;d<=D;d++){
-        for (int modd=0;modd<d;modd++){
-            int net = 0;
-            for (int a=modd;a<=N;a+=d){
-                if (net>0 && net+presum[d][modd][a]>0) dsu.join(a, a-d);
-                net += presum[d][modd][a];
+        for (int a0=1;a0<=d;a0++){
+            int latestHead = -1;
+            for (int a=a0;a<=N;a+=d) {
+                if (a <= latestHead) dsu.join(a, latestHead);
+                latestHead = max(latestHead, r[d][a]);
+                if (a <= latestHead) dsu.join(a, latestHead);
             }
         }
     }
