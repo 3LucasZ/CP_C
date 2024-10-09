@@ -72,8 +72,8 @@ int main() {
     mp3[1]=stuff;
     dbg(mp3);
 
-    vector<bool> ok(10);
-    //dbg(ok);
+    vector<bool> vb(10);
+    // dbg(vb);
 
     vector<int> v(10);
     dbg(v);
