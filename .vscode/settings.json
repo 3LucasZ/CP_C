@@ -93,7 +93,7 @@
     // "cppp": "g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_ASSERTIONS -DDEBUG -ggdb3 -fsanitize=address,undefined -g -fno-sanitize-recover -ferror-limit=2 -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt",
     // "cpp": "g++-11 -std=c++17 -stdlib=libc++ -O2 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_ASSERTIONS -DDEBUG -ggdb3 -fsanitize=address,undefined -g -fno-sanitize-recover -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt"
     // -ferror-limit=2
-    "cpp": "g++-11 -DDEBUG -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt && ",
+    "cpp": "g++-11 -I $workspaceRoot/zlib -DDEBUG -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt && python3 $workspaceRoot/fix.py $dir/$fileName",
     "python": "python3"
   },
   "code-runner.ignoreSelection": true,
