@@ -65,12 +65,11 @@ int orientation(point<T> p1, point<T> p2, point<T> p3) {
 }
 template <typename T>
 bool onSegment(point<T> p, point<T> q, point<T> r) {
-    return q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y);
+    return orientation(p,q,r) == 0 && q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y);
 }
 template <typename T>
 bool intersecting(point<T> p1, point<T> q1, point<T> p2, point<T> q2) {
     int o1 = orientation(p1, q1, p2); int o2 = orientation(p1, q1, q2); int o3 = orientation(p2, q2, p1); int o4 = orientation(p2, q2, q1);
-    dbg(o1,o2,o3,o4);
     if ((o1 == 0 && onSegment(p1, p2, q1)) || (o2 == 0 && onSegment(p1, q2, q1)) || (o3 == 0 && onSegment(p2, p1, q2)) || (o4 == 0 && onSegment(p2, q1, q2))) return true; 
     return o1 != o2 && o3 != o4;
 }

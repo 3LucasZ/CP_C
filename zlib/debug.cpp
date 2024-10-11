@@ -1,4 +1,3 @@
-#include <bits/stdc++.h>
 using namespace std;
 
 template <typename A, typename B>
@@ -16,6 +15,10 @@ string to_string(const string& s) {
 
 string to_string(const char* s) {
   return to_string((string) s);
+}
+
+string to_string(char s) {
+  return to_string(""+s);
 }
 
 string to_string(bool b) {

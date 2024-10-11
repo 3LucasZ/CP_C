@@ -87,7 +87,8 @@
     "valarray": "cpp",
     "numeric": "cpp",
     "random": "cpp",
-    "functional": "cpp"
+    "functional": "cpp",
+    "span": "cpp"
   },
   "code-runner.executorMap": {
     // "cppp": "g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_ASSERTIONS -DDEBUG -ggdb3 -fsanitize=address,undefined -g -fno-sanitize-recover -ferror-limit=2 -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt",

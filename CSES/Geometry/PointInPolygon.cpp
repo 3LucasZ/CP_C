@@ -65,7 +65,7 @@ int orientation(point<T> p1, point<T> p2, point<T> p3) {
 }
 template <typename T>
 bool onSegment(point<T> p, point<T> q, point<T> r) {
-    return q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y);
+    return orientation(p,q,r) == 0 && q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y);
 }
 template <typename T>
 bool intersecting(point<T> p1, point<T> q1, point<T> p2, point<T> q2) {
@@ -85,28 +85,35 @@ T area2(vector<point<T>> points) {
     return abs(ret);
 }
 
-void solve() {
-    ll x1, y1, x2, y2, x3, y3;
-    cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
-    point p(x1,y1); point q(x2,y2); point r(x3,y3);
-    dbg(p,q,r);
-    ll dir = orientation(p,q,r);
-    if (dir > 0){
-        cout << "LEFT";
-    } else if (dir < 0){
-        cout << "RIGHT";
-    } else {
-        cout << "TOUCH";
-    }
-    cout << nl;
-}
-
-
-
-
-
+int N, M;
+vector<point<ll>> points;
 
 int main() {
-    int T; cin >> T;
-    for (int i=0;i<T;i++) solve();
+    cin >> N >> M;
+    for (int i=0;i<N;i++){
+        ll x, y; cin >> x >> y;
+        points.push_back({x,y});
+    }
+    points.push_back(points[0]);
+
+    for (int i=0;i<M;i++){
+        point<ll> a; cin >> a.x >> a.y;
+        point<ll> b = {a.x+2e9, a.y+1};
+        int cnt = 0;
+        for (int j=0;j<=N;j++){
+            if (j == N) {
+                if (cnt%2==1) cout << "INSIDE" << nl;
+                else cout << "OUTSIDE" << nl;
+            }
+            else if (intersecting(a,b,points[j],points[j+1])){
+                //boundary?
+                if (onSegment(points[j],a,points[j+1])){
+                    cout << "BOUNDARY" << nl;
+                    break;
+                }
+                //intersects?
+                cnt++;
+            }
+        }
+    }
 }
