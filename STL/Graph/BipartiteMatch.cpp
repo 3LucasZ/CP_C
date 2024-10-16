@@ -24,7 +24,6 @@ bool bpm(vector<vector<bool>> &bpGraph, int u, vector<bool> &seen, vector<int> &
             // recursive call will not get job 'v' again
             if (matchR[v] < 0 || bpm(bpGraph, matchR[v], seen, matchR)) {
                 matchR[v] = u;
-                dbg(v,u);
                 return true;
             }
         }
