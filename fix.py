@@ -1,7 +1,7 @@
 import sys
 import os
 
-bad_words = ["debug.cpp", "dbg("]
+bad_words = ["debug.cpp", "dbg(", "//"]
 
 input = sys.argv
 # print(input)
