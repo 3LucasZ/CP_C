@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/zlib"
+                "${workspaceFolder}/zlib",
+                "${workspaceFolder}/zlib/bits/stdc++.h"
             ],
             "defines": [],
             "macFrameworkPath": [

@@ -18,7 +18,8 @@ string to_string(const char* s) {
 }
 
 string to_string(char s) {
-  return to_string(""+s);
+  string s1{s};
+  return s1;
 }
 
 string to_string(bool b) {

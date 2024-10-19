@@ -1,7 +1,7 @@
 import sys
 import os
 
-bad_words = ["debug.cpp", "dbg(", "//"]
+bad_words = ["debug.cpp", "dbg("]
 
 input = sys.argv
 # print(input)
@@ -16,6 +16,7 @@ outputFilepath = os.path.join(workspaceDir, "ZZZZZ.cpp")
 with open(inputFilepath) as oldfile, open(outputFilepath, 'w+') as newfile:
     for line in oldfile:
         if not any(bad_word in line for bad_word in bad_words):
+            line = line.split("//")[0] # remove comments!!
             newfile.write(line)
 
 print("ZZZZZ ready!")
