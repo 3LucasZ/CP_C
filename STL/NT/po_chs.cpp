@@ -1,4 +1,5 @@
-#include <iostream>
+#include <bits/stdc++.h>
+#include "debug.cpp"
 using namespace std;
 typedef long long ll;
 
@@ -36,17 +37,18 @@ ll chs(int n, int k) {
 
 int main() {
     setupChs();
-    cout << po(2,10) << endl;
-    cout << po(2,100) << endl;
-    cout << po(2,1000) << endl;
+    dbg(po(2,10));
+    dbg(po(2,20));
+    dbg(po(2,100));
 
-    cout << chs(5,2) << endl;
-    cout << chs(5,1) << endl;
-    cout << chs(5,0) << endl;
+    dbg(po(10000, MOD-2));
 
-    cout << chs(100, 50) << endl;
-    cout << chs(0,0) << endl;
-    cout << chs(0,-1) << endl;
-    cout << chs (100,500) << endl;
-    return 0;
+    dbg(chs(5,2));
+    dbg(chs(5,1));
+    dbg(chs(5,0));
+
+    dbg(chs(100, 50));
+    dbg(chs(0,0));
+    dbg(chs(0,-1));
+    dbg(chs (100,500));
 }
