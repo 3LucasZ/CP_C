@@ -109,7 +109,7 @@
     // "cpp": "g++-11 -std=c++20 -I $workspaceRoot/zlib -DDEBUG -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt && python3 $workspaceRoot/fix.py $dir/$fileName",
     "cpp": "g++-11 -std=c++20 -I $workspaceRoot/zlib -DDEBUG -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt < $workspaceRoot/in.txt && python3 $workspaceRoot/fix.py $dir/$fileName",
     //INTERACTIVE
-    // "cpp": "g++-11 -std=c++20 -I $workspaceRoot/zlib -DDEBUG -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt && python3 $workspaceRoot/fix.py $dir/$fileName",
+    // "cpp": "python3 $workspaceRoot/fix.py $dir/$fileName && g++-11 -std=c++20 -I $workspaceRoot/zlib -DDEBUG -Wl,-stack_size,0x10000000 $dir/$fileName -o $workspaceRoot/build/$fileNameWithoutExt && $workspaceRoot/build/$fileNameWithoutExt",
     "python": "python3"
   },
   "code-runner.ignoreSelection": true,
