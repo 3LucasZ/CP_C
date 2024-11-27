@@ -8,11 +8,11 @@ const char nl = '\n';
 
 int main() {
     freopen("in.txt","w",stdout);
-    ll n = 100000;
+    ll n = 200000;
     cout << n << endl;
     srand(time(0));
     for (int i=0;i<n;i++) {
-        ll b = rand()%1000+2;
-        cout << b*b << endl;
+        ll b = 2*3*5*7*11*13*17;
+        cout << b << endl;
     }
 }
