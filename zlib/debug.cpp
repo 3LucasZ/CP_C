@@ -92,3 +92,12 @@ void debug_out(Head H, Tail... T) {
 #else
 #define dbg(...) 42
 #endif
+
+using namespace std::chrono;
+auto start = high_resolution_clock::now();
+void printTime() {
+  auto stop = high_resolution_clock::now();
+  auto duration = duration_cast<milliseconds>(stop - start);
+  cout << duration.count() << " ms" << endl;
+  start = stop;
+}
