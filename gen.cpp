@@ -8,11 +8,15 @@ const char nl = '\n';
 
 int main() {
     freopen("in.txt","w",stdout);
-    ll n = 200000;
-    cout << n << endl;
-    srand(time(0));
-    for (int i=0;i<n;i++) {
-        ll b = 2*3*5*7*11*13*17;
-        cout << b << endl;
+    int t = 5;
+    cout << t << endl;
+    for (int i=0;i<t;i++){
+        ll n = 1e5;
+        ll k = 1e5;
+        cout << n << " " << k << endl;
+        int x = 1e9;
+        for (int i=0;i<n;i++) {
+            cout << x-i << endl;
+        }
     }
 }
