@@ -43,7 +43,7 @@ struct Obj {
     int val = 0;
 };
 Obj operator+(const Obj &a, const Obj &b) {
-    Obj res;
+    Obj res = {};
     res.val = a.val + b.val;
     return res;
 }
