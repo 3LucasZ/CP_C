@@ -1,8 +1,5 @@
-// NOTE:
-// I got the main idea and algorithm correct.
-// Couldn't finish the implementation since it has been taking a while.
-// I read the editorial after solving and I have everything logically correct.
-// Will come back to it another day!
+// Gave up and read the editorial
+// https://codeforces.com/blog/entry/137801
 
 #include <bits/stdc++.h>
 #include "debug.cpp"
@@ -18,74 +15,84 @@ vector<vector<int>> a;
 vector<vector<int>> b;
 int R, C;
 vector<int> vis;
-vector<bool> mustRow;
-vector<bool> mustCol;
 
-bool dfs(int i, int color) {
-    if (vis[i]<color) return true;
-    if (vis[i]==color) return false;
-    vis[i]=color;
-    // handle rows
-    if (i<R) {
-        for (int j=0;j<C;j++){
-            if (b[i][j]==1) {
-                if (dfs(R+j, color)==false) return false;
-            }
-        }
+struct graph {
+    int V;
+    vector<vector<int>> g;
+    vector<int> color;
+    graph(int V){
+        this->V = V;
+        this->g.resize(V);
+        this->color.resize(V);
+    };
+    void add(int u, int v) {
+        g[u].push_back(v);
     }
-    // handle cols 
-    else {
-        i-=R;
-        for (int j=0;j<R;j++){
-            if (b[j][i]==0) {
-                if (dfs(j, color)==false) return false;
-            }
+    bool isLoop(int u){
+        if (color[u]!=0) return false;
+        color[u] = 1;
+        bool ret = false;
+        for (int v : g[u]){
+            if (color[v]==2) continue;
+            else if (color[v]==0) ret |= isLoop(v);
+            else ret = true;
         }
+        color[u] = 2;
+        return ret;
     }
-    return true;
-}
+};
+
 bool ok(int bit) {
+    //fixate arrays a and b onto given bit
     for (int i=0;i<R;i++){
         for (int j=0;j<C;j++){
-            a[i][j]=(A[i][j]&(1<<bit))==0?0:1;
-            b[i][j]=(B[i][j]&(1<<bit))==0?0:1;
+            a[i][j]=(A[i][j]>>bit)&1;
+            b[i][j]=(B[i][j]>>bit)&1;
         }
     }
 
-    mustRow.clear(); mustRow.resize(R);
-    mustCol.clear(); mustCol.resize(C);
+    vector<bool> mustRow(R);
+    vector<bool> mustCol(C);
+    auto G = graph(R+C);
+
+    // find the operations you need to use 
     for (int i=0;i<R;i++){
         for (int j=0;j<C;j++){
+            // use & operation on row i
             if (a[i][j]==1 && b[i][j]==0) {
                 mustRow[i] = true;
             }
+            // use | operation on column j
             if (a[i][j]==0 && b[i][j]==1) {
-                mustCol[i] = true;
+                mustCol[j] = true;
             }
+            // add edge to graph if another operation must be applied after this operation
+            // this happens if our operations messes up other nodes
+            if (b[i][j]==0) G.add(j+R, i);
+            else G.add(i, j+R);
         }
     }
     
-    // dbg(colOps, rowOps);
-    vis.clear(); vis.resize(R+C, INT_MAX);
-    int color = 1;
+    // check if any operators creates a cycle
     for (int i=0;i<R;i++){
-        if (mustRow[i] && dfs(i, color) == false) return false;
-        color++;
+        if (mustRow[i] && G.isLoop(i)) return false;
     }
-    for (int i=0;i<C;i++){
-        if (mustCol[i] && dfs(R+i, color) == false) return false;
-        color++;
+    for (int j=0;j<C;j++){
+        if (mustCol[j] && G.isLoop(j+R)) return false;
     }
     return true;
 }
 
-// boilerplate
 void solve() {
+    // dimensions
     cin >> R >> C;
+    // main input arrays
     A.clear(); A.resize(R,vector<int>(C));
     B.clear(); B.resize(R,vector<int>(C));
+    // temporary bit-focused arrays
     a.clear(); a.resize(R,vector<int>(C));
     b.clear(); b.resize(R,vector<int>(C));
+    //input
     for (int i=0;i<R;i++){
         for (int j=0;j<C;j++){
             cin >> A[i][j];
@@ -96,6 +103,7 @@ void solve() {
             cin >> B[i][j];
         }
     }
+    //check that each bit [0-30] when focused is ok
     for (int i=0;i<=30;i++){
         if (ok(i) == false) {
             cout << "No" << nl;
