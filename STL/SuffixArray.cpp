@@ -1,4 +1,5 @@
 // Tested on Codeforces and works 4/4/25
+// https://codeforces.com/edu/course/2/lesson/2/4/practice/contest/269119/problem/A
 
 #include <bits/stdc++.h>
 #include "debug.cpp"
@@ -40,7 +41,7 @@ int main() {
     dbg(n, str);
 
     vector<pair<pair<int, int>, int>> sufs(n);
-    //base
+    // base
     for (int i=0;i<n;i++){
         sufs[i] = {{str[i], str[i]}, i};
     }
@@ -52,7 +53,7 @@ int main() {
         ord[sufs[i].second] = ord[sufs[i-1].second] + (sufs[i].first > sufs[i-1].first);
     }
     dbg(ord);
-    //transitions
+    // transitions
     for (int nxt=1;nxt<n;nxt*=2){
         for (auto &suf : sufs) {
             suf.first = {ord[suf.second], ord[(suf.second+nxt)%n]};
@@ -62,9 +63,29 @@ int main() {
             ord[sufs[i].second] = ord[sufs[i-1].second] + (sufs[i].first > sufs[i-1].first);
         }
     }
-    //solve
+    // print final suffix array
     for (int i=0;i<n;i++){
         cout << sufs[i].second << " ";
     }
     cout << nl;
+    // construct LCP
+    vector<int> p(n); // rank of suffix i
+    for (int i=0;i<n;i++){
+        p[sufs[i].second] = i;
+    }
+    dbg(p);
+    int k = 0;
+    vector<int> lcp(n); // lcp of suffix i and j where j is right before i in the sort
+    for (int i=0;i<n-1;i++){
+        int j = sufs[p[i]-1].second;
+        while (str[i+k]==str[j+k]) k++;
+        lcp[i] = k;
+        k = max(k-1, 0);
+    }
+    // print LCP array
+    for (int i=1;i<n;i++){
+        cout << lcp[sufs[i].second] << " ";
+    }
+    cout << nl;
+    for (int i=0;i<n;i++) dbg(sufs[i].second, str.substr(sufs[i].second), lcp[sufs[i].second]);
 }
