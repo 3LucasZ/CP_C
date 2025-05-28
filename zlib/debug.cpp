@@ -47,6 +47,25 @@ string to_string(vector<bool> v)
   return res;
 }
 
+string to_string(priority_queue<int> v)
+{
+  priority_queue<int> copy = priority_queue(v);
+  bool first = true;
+  string res = "{";
+  while (!copy.empty())
+  {
+    if (!first)
+    {
+      res += ", ";
+    }
+    first = false;
+    res += to_string(copy.top());
+    copy.pop();
+  }
+  res += "}";
+  return res;
+}
+
 template <size_t N>
 string to_string(bitset<N> v)
 {
