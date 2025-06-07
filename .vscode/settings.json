@@ -113,6 +113,7 @@
     "python": "python3"
   },
   "code-runner.ignoreSelection": true,
+  "editor.formatOnSave": true,
   "files.exclude": {
     "build": true
   }
